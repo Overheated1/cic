@@ -1,0 +1,129 @@
+.TableContainer{
+    width: 100%;
+    display: grid;
+    grid-template-columns: 20% 77%;
+    grid-template-rows: max-content calc(100%,max-content);
+    gap: 3em;
+    justify-content: center;
+    align-items: flex-start;
+    height: 92%;
+}
+input{
+    padding: .7em 1.5em;
+    font-size: .7em;
+}
+#rep-graph{
+    grid-column: 2/3;
+}
+.parent-svg:hover{
+    cursor: pointer;
+}
+.parent-svg:hover svg{
+    fill: rgb(93, 93, 255);
+}
+div.no-margin-top{
+    margin-top: 0;
+}
+#about-card7-svg,#about-card6-svg,#about-card5-svg,#about-card4-svg,#about-card3-svg,#about-card2-svg,#about-card1-svg,#print-svg,#download-csv-svg,#password-svg,#user-svg{
+    width: 2em;
+    height: 2em;
+}
+#concentration-serum-svg,#serum-svg,#help-svg,#n-svg,#quality-control-svg,#d1d2-svg,#d1-and-d2-avg,#date-svg,#search-svg,#component-svg,#pattern-svg,#method-svg,#institution-svg,#equipment-svg,#concentration-svg,#temperature-svg{
+    width: 1.5em;
+    height: 1.5em;
+}
+#about-svg{
+    width: 2em;
+    height: 2em;
+}
+div.column-flex{
+    flex-direction: column;
+    width: auto;
+    margin-top: 2em;
+}
+.cls-1 {
+    fill: none;
+}
+#password-svg{
+    fill:#232323;
+}
+form.extra-gap,div.extra-gap{
+    gap:3em;
+}
+#search-svg{
+    right:15%;
+    position: absolute;
+}
+#add-svg,#trash-svg{
+    transform: scale(60%);
+    fill: #fff;
+}
+div.center-flex{
+    justify-content: center;
+    align-items: center;
+}
+.error{
+    background-color: rgb(255, 169, 169);
+    font-size: 1.3em;
+    display: none;
+}
+.ContInpPlaceholder{
+    display: flex;
+    gap: 1em;
+}
+.grid-two-columns{
+    display: grid;
+    grid-template-columns: repeat(2,1fr);
+    justify-content: space-between;
+    align-items: flex-start;
+    padding: 2em;
+    margin: 0 auto;
+}
+.grid-one-column{
+    display: grid;
+    grid-template-columns: 1fr;
+    justify-content: center;
+    align-items: center;
+    padding: 2em;
+    margin: 0 auto;
+}
+.ContInpPlaceholder .placeholder{
+    position: absolute;
+    margin-left: 4em;
+    margin-top: .5em;
+    color: #585858;
+    font-size: .8em;
+    transition: margin .7s;
+}
+.ContInpPlaceholder
+.left-alignment{
+    text-align: left;
+}
+.ContInpPlaceholder label{
+    cursor:text;
+}
+.ContInpCheckbox input{
+    width: 2em;
+    height: 2em;
+}
+.ContInpCheckbox{
+    color: #585858;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    width: 13em;
+}
+.ContInpPlaceholder input:valid~.placeholder,
+.ContInpPlaceholder input:focus~.placeholder{
+    display: block;
+    margin-left: 4em;
+    margin-top: -1.4em;
+}
+#about1-svg{
+    width: 1.1em;
+    height: 1.1em;
+    fill: #fff;
+}
+#data-container tr td{
+    text-align: center;
+}

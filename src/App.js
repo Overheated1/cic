@@ -1,14 +1,26 @@
 import './App.css';
-import { useNavigate, Route,Routes, Outlet } from "react-router-dom";
-import { useDispatch } from 'react-redux';
-import { DemoPie } from './components/DemoPie.js';
+import './style-sheets/General.css';
+import { useNavigate } from "react-router-dom";
+import { NavBar } from './components/NavBar';
+import { RouteHandler } from './components/RouteHandler';
+import { getCookie } from "./utils/utils";
+import { useEffect } from 'react';
+
 function App() {
+  const navigate = useNavigate();
+  const authToken = getCookie('auth_token');
+
+  const isAuth = authToken !== null;
+  useEffect(() => {
+    if(!isAuth){
+      navigate("/Login");
+  }
+  },[isAuth,navigate])
+  
   return (
     <div className="App">
-    <DemoPie />
-      <Routes>
-        <Route exact path="/" />{/*<Link to="path">Home</Link>*/}
-      </Routes>
+      {isAuth && <NavBar navigate={navigate}/>}
+      <RouteHandler navigate={navigate}/>
     </div>
   );
 }

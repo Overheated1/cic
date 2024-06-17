@@ -1,0 +1,23 @@
+.help-container{
+    display: grid;
+    grid-template-columns: 20% 77%;
+    height: 90%;
+}
+.help-step{
+    color: #fff;
+    background-color: rgb(131, 131, 194);
+    width: 15em;
+    padding: 1em;
+    font-size: .8em;
+    border-radius: .6em;
+}
+form.top-alignment{
+    justify-content: flex-start;
+    padding-top: 5em;
+}
+.help-step:hover{
+    filter: saturate(60%);
+}
+.current-step{
+    background-color: rgb(61, 61, 146);
+}

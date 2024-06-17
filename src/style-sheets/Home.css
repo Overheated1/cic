@@ -1,0 +1,15 @@
+.main-page-image{
+    width: 80%;
+    filter: hue-rotate(690deg);
+}
+#about-us{
+    background-color:  #1e416c;
+    border-radius: .5em;
+    font-size: 1.4em;
+    border: 1px solid #1e416c;
+    color: #fff;
+}
+#about-us:hover{
+    filter: saturate(60%);
+    cursor: pointer;
+}
