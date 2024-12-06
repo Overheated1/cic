@@ -1,7 +1,7 @@
 import "../style-sheets/Home.css"
-import principal from "../resources/principal.jpg"
+import principal from "../resources/principal.png"
 
-export const Home = ({ navigate }) => {
+const Home = ({ navigate }) => {
     
     return(
         <div className="flex-column center-flex">
@@ -11,7 +11,8 @@ export const Home = ({ navigate }) => {
                 </h1>
                 <input type="button" onClick={() => navigate("/Acerca")} id="about-us" value="Acerca de Nosotros"/>
             </div>
-            <img className="main-page-image" src={ principal } alt="Principal icon laboratory with persons"/>
+            <img loading="lazy" className="main-page-image" src={ principal } alt="Principal icon laboratory with persons"/>
         </div>
     );
 }
+export default Home;

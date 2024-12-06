@@ -1,9 +1,9 @@
 import {configureStore} from "@reduxjs/toolkit"
-import authReducer from "./reducers/Authslice"
+import {customAlertReducer} from "./reducers/customAlertReducer.js"
 
 const store = configureStore({
     reducer:{
-        auth:authReducer,
+        customAlert:customAlertReducer,
     },
 });
 export default store;

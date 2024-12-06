@@ -1,5 +1,4 @@
 import React from 'react';
-import { Line } from '@ant-design/plots';
 
 export const DemoLine = ({ data }) => {
   let formattedDate = new Date().toISOString().split('T')[0];
@@ -49,6 +48,5 @@ export const DemoLine = ({ data }) => {
 
   return (
     <div id="rep-graph">
-      <Line {...config} />
     </div>);
 };

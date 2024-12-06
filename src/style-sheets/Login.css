@@ -1,22 +1,45 @@
 .formLogin{
     font-size: 1.2em;
-    background-color: rgba(208, 208, 208, 0.3);
-    backdrop-filter: blur(0.5rem);
-    border-radius: 1em;
-    max-width: 30em;
-    height: 35em;
     justify-content: center;
     align-items: center;
     margin: 0 auto;
     display: flex;
     flex-direction: column;
     padding: 4em;
-    gap: 1.5em;
+    gap: 1.5em; 
+    min-width: 40%;
 }
-.FormDiv{
+.container-login-image{
+    display: flex;
+    justify-content: flex-start;
+    height: 99%;
+}
+.container-login-image img{
+    border-radius: .8em;
+    width: 100%;
+}
+.loginCard{
+    box-shadow: 0 3px 10px #4e4e4e63;
+    width: 74%;
+    min-height: 45em;
+    height: 95%;
+    background-color: rgb(255, 255, 255,0.3);
+    /* min-height: 60em; */
+    backdrop-filter: blur(2rem);
+    border-radius: 1em;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: .5em;
+}
+.loginPaddingDiv{
     display: flex;
     justify-content: center;
     align-items: center;
+    /* background-color:  #adbdc460; */
+    background: url("../resources/background.png");
+    background-repeat: no-repeat;
+    background-size: cover;
     width: 100%;
     height: 100%;
 }
@@ -35,25 +58,17 @@
 div.no-background-color{
     background-color: transparent;
 }
-.error p{
-    font-size: .7em;
-}
-.error{
-    text-align: center;
-    color: red;
-    height: 1em;
-    margin-top: 1em;
-    margin-bottom: 1.7em;
-}
+
 .buttonLogin{
-    border:1px solid rgb(3, 36, 65);
+    border:1px solid var(--main-color);    
     font-size: 0.9em;
     margin-top: 1em;
-    width: 14em;
-    height: 2.4em;
+    width: 100%;
+    height: 3em;
     background-color: transparent;
     border-radius: 0.5em;
     transition: all .5s;
+    cursor: pointer;
 }
 .Log{
     text-decoration: underline;
@@ -64,59 +79,171 @@ div.no-background-color{
     color: rgba(129, 2, 255, 0.777);
 }
 .buttonLogin:hover{
-    background-color: rgb(36, 36, 98);
+    background-color: var(--main-color);
     color: rgb(255, 255, 255);
 }
-
+.LoginP{
+    font-size: 1.5em;
+}
 .TextLog{
     font-size: 0.9em;
     padding: 1em;
 }
 
-.inputLogin{
+input.inputLogin{
     font-size: 0.9em;
-    background-color: transparent;
+    border-radius: .5em;
+    height: 2em;
+    padding: 1.5em;
     border: none;
-    width: 20em;
-    border-bottom: 1px solid #000;
+    width: 100%;
     resize: none;
     outline: none;   
+    background-color: rgb(248, 248, 248);
+}
+div.ContInpPlaceholderLog
+{
+    width: 100%;
+    box-shadow: 0 2px 4px rgb(201, 201, 201);
+    background-color: var(--main-color);
+    border-radius: .5em;
+    padding-right: .7em;
+    justify-content: flex-start;
+    align-items: center;
 }
 div.ContInpPlaceholderLog .placeholder
 {
-    margin-left: .5em;
-    margin-top: .5em;
+    margin-left: 1.8em;
+    margin-top: .2em;
 }
 
-.ContInpPlaceholderPassword input:valid~.placeholder,
-.ContInpPlaceholderPassword input:focus~.placeholder{
+div.ContInpPlaceholderLog input:valid~.placeholder,
+div.ContInpPlaceholderLog input:focus~.placeholder{
     display: block;
-    margin-left: 2em;
-    margin-top: -1.4em;
+    margin-left: 1em;
+    margin-top: -5em;
 }
-.ContInpPlaceholderUser input:valid~.placeholder,
-.ContInpPlaceholderUser input:focus~.placeholder{
-    display: block;
-    margin-left: 1.5em;
-    margin-top: -1.4em;
-}
-
 .no-padding{
     padding: 0;
 }
-@media (max-height: 1000px) and (max-width: 1000px){
-    .FormDiv{
+
+/* better size for small devices that had a row direction flex */
+@media (min-width: 700px) and (max-width: 1280px){
+    .loginCard{
+        width: 95%;
+        height: 80%;
+        min-height: 0;
+    }
+    div.container-login-image{
+        min-height: 100%;
+    }
+    
+    .grid-blocks{
+        width: 100%;
+    }
+}
+/* mobile design don't delete me o you may experiment a 3d effect*/
+@media (max-width: 700px) and (max-height: 1000px){
+
+
+    .loginPaddingDiv{
+        font-weight: 300;
+    }
+    
+    /* HANDLE SIGN UP OVERFLOW */
+    div.container-login-image.sign-up-image-container{
+        height: 30%;
+        display: none;
+    }
+    .loginCard{
         display: flex;
-        justify-content: center;
+        flex-direction: column;
+        width: 85%;
+        backdrop-filter: blur(.8rem);
+        height: 95%;
+    }
+    div.smaller-height-login-card{
+        height: 80%;
+    }
+    
+    div.header-login{
+        justify-content: space-around;
+    }
+
+    .container-close-login{
+        justify-content: flex-start;
+    }
+
+    .continue-with-container{
+        transform: scale(.8);
+    }
+    div.grid-blocks{
+        padding: 0 1em;
+        width: 100%;
+        justify-content: unset;
+    }
+    .formLogin{
+        width: 95%;
+        margin: 0 auto;
+    }
+    div.container-login-image{
+        height: 45%;
+
+    }
+}
+/* handle 2k+ devices */
+@media (min-width: 1920px){
+    .loginCard{
+        font-size: 1.2em;
+    }
+    
+}
+/* helps with the image in the flex container that is showed small */
+@media (min-width: 412px) and (max-width: 900px) and (max-height: 1290px){
+    
+    div.container-login-image{
+        height: 55%;
+    }
+    div.loginCard{
+        gap: .3em;
+    }
+    
+}
+
+/* small devices first aid package v2 for medium devices font size helps a lot with small devices */
+@media (max-width: 550px) and (min-height: 660px) and (max-height: 800px){
+    .loginCard{
+        font-size: 80%;
+    }
+
+    div.container-login-image{
+        height: 40%;
+    }
+    .formLogin{
+        width: 100%;
+    }
+    
+}
+/* small devices first aid package font size helps a lot with small devices */
+@media (max-width: 550px) and (max-height: 660px){
+    .loginCard{
+        font-size: 50%;
+    }
+    
+}
+/* no way that exist a device with that dimensions but.. murphy law */
+@media (max-height: 400px){
+    div.container-login-image{
+        display: none;
+    }
+    div.loginCard{
+        display: flex;
         align-items: center;
-        width: 15em;
-        height: 48em;
-    }
-    .formLogin {
+        font-size: .7em;
+        justify-content: center;
+        height: 90%;
         width: 80%;
-        font-size: 0.8em;
+        min-height: 0;
     }
-    .formLogin input{
-        width: 15em;
-    }
+    
 }

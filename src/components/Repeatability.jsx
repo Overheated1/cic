@@ -1,14 +1,6 @@
 import "../style-sheets/Repeatability.css"
-import { useState} from "react";
-import { DemoLine } from "./DemoLine";
-import { N } from "./svg_components/NSvg";
-import { D1D2 } from "./svg_components/D1D2Svg";
-import { D1AndD2 } from "./svg_components/D1AndD2Svg";
-import { DateSvg } from "./svg_components/DateSvg";
-import { SearchSvg } from "./svg_components/SearchSvg";
-import { InputRow } from "./table_components/InputRow";
-import { v4 as uuid } from "uuid";
-import { AddSvg } from "./svg_components/AddSvg";
+import { useContext, useEffect, useRef, useState } from "react";
+import { ApiContext } from "./ApiContext.jsx";
 import { InstitutionSvg } from "./svg_components/InstitutionSvg";
 import { ComponentSvg } from "./svg_components/ComponentSvg";
 import { PatternSvg } from "./svg_components/PatternSvg";
@@ -16,273 +8,461 @@ import { EquipmentSvg } from "./svg_components/EquipmentSvg";
 import { MethodSvg } from "./svg_components/MethodSvg";
 import { TemperatureSvg } from "./svg_components/TemperatureSvg";
 import { ConcentrationSvg } from "./svg_components/ConcentrationSvg";
-import { DownloadCsvSvg } from "./svg_components/DownloadCsvSvg";
-import { PrintSvg } from "./svg_components/PrintSvg";
 import { SerumSvg } from "./svg_components/SerumSvg";
 import { ConcentrationSerumSvg } from "./svg_components/ConcentrationSerumSvg";
+import { Table } from "./table_components/Table";
+import { DemoLine } from "./DemoLine";
+import { N } from "./svg_components/NSvg";
+import { D1D2 } from "./svg_components/D1D2Svg";
+import { D1AndD2 } from "./svg_components/D1AndD2Svg";
+import { DateSvg } from "./svg_components/DateSvg";
+import { CustomSelect } from "./custom_components/custom_select_component/CustomSelect";
+import { About1Svg } from "./svg_components/About1Svg.jsx";
+import { TrashSvg } from "./svg_components/TrashSvg.jsx";
+import { EditSvg } from "./svg_components/EditSvg.jsx";
+import { AddSvg } from "./svg_components/AddSvg.jsx";
+import { SaveSvg } from "./svg_components/SaveSvg.jsx";
+import { handleResponse } from "../utils/utils.js";
+import AreaLineChart from "./AreLineChart.jsx";
+import ReactApexChart from "react-apexcharts";
 
 
-let dataRows = {};
-let actualRow = "";
-let tempDataPlot = {}; 
-export const Repeatability = () => {
-    const [dataPlot,setDataPlot] = useState([]);
+const Repeatability = () => {
     const [isCommercial,setIsCommercial] = useState(false);
-    const [dataRowsComponent,setDataRowsComponent] = useState([]);
+    const { BASE_URL,PORT } = useContext(ApiContext);
 
-    const handleChange = (e) => {
-        let rowNumber = e.target.classList[2];
-        dataRows[rowNumber][e.target.name] = e.target.value;
-        let d1 = dataRows[rowNumber]['d1'];
-        let d2 = dataRows[rowNumber]['d2'];
-        let date = dataRows[rowNumber]['date'];
-        if(d1 !== "" && d2 !== ""){
-            document.querySelector(`input.${ rowNumber }.d1_d2`).value = parseInt(d1) - parseInt(d2);
-        }
-        if(date !== "" && d1 !== "" && d2 !== ""){
-            let number = rowNumber.split("row")[1];
-            tempDataPlot[number] = {"index":rowNumber.split("row")[1],"date":date,"|d1 - d2|":document.querySelector(`input.${ rowNumber }.d1_d2`).value};   
-            console.log(tempDataPlot);
-            document.querySelector(`.error${rowNumber.split("row")[1]}`).style.display = "none"
-        }
-    }
-    const addRow = (e) => {
-        e.stopPropagation()
-        e.preventDefault()
-        let rowNumber = Object.keys(dataRows).length;
-        let prevRowNumber = rowNumber - 1;
-        actualRow = `row${rowNumber}`;
-        let insert = true;
-        let id = uuid(); 
-        let container = e.target.parentNode;
+    const [determinationData,setDeterminationData] = useState([]);
+    const [temperatureData,setTemperatureData] = useState([]);
+    const [institutionsData,setInstitutionsData] = useState([]);
+    const [controllersData,setControllersData] = useState([]);
+    const [dataRows,setDataRows] = useState([]);
 
-        if(prevRowNumber !== -1){
-            // console.log(container.classList[2]);
-            prevRowNumber = `row${prevRowNumber}`;
-            let keysRow = Object.keys(dataRows[prevRowNumber]);
-            for(let i = 0;i < keysRow.length;i++){
-                if(dataRows[prevRowNumber][keysRow[i]] === ""){
-                    insert = false;
-                    document.querySelector(`.error${rowNumber - 1}`).style.display = "table-cell"
-                    return;
-                }
-            };
-            document.querySelector(`.error${rowNumber - 1}`).style.display = "none"
-            container.firstElementChild.style.display = "none";
-        }
-        dataRows[actualRow] = 
-            {
-                "N":rowNumber + 1,
-                "d1":"",
-                "d2":"",
-                "date":""
-            };
+    const[dates,setDates] = useState([]);
+    const[data,setData] = useState([]);
+
+    const [formData,setFormData] = useState({
+        "institution_id" : "",
+        "determination_id" : "",
+        "repeatability_id"  : "",
+        "equipment_name" : "",
+        "analytic_method_name" : "",
+        "analytic_technique_name" : "",
+        "controller_concentration" : "",
+        "temperature_value" : "",
+        "controller_id" : "",
+        "controller_commercial_brand" : "",
+        "is_commercial_serum" : false
+    })
+
+    const [formDataErrors,setFormDataErrors] = useState({
+        "institution_id" : false,
+        "determination_id" : false,
+        "repeatability_id"  : false,
+        "equipment_name" : false,
+        "analytic_method_name" : false,
+        "analytic_technique_name" : false,
+        "controller_concentration" : false,
+        "temperature_value" : false,
+        "controller_id" : false,
+        "controller_commercial_brand" : false,
+    })
+
+    let fragmentsDataRepeatability = {};
+
+    let formFieldsObject = {};
+
+
+    const requestDeterminationsData = async () => {
+        let response = await fetch(`${BASE_URL}${PORT}/determinations`);
+        setDeterminationData(await handleResponse(response));
+
+        response = await fetch(`${BASE_URL}${PORT}/temperatures`);
+        setTemperatureData(await handleResponse(response));
         
-        if(insert){
-            setDataRowsComponent(prevDataRowsComponent => [
-                ...prevDataRowsComponent,
-                <InputRow key={id} id={id} rowNumber={rowNumber} plotData={plotData} handleChange={handleChange} addRow={addRow} deleteRow={deleteRow}/>
-            ]);
-        }
+        response = await fetch(`${BASE_URL}${PORT}/institutions`);
+        setInstitutionsData(await handleResponse(response));
         
+        response = await fetch(`${BASE_URL}${PORT}/controllers`);
+        setControllersData(await handleResponse(response));
         
-    }        
+    }
+    const isLastFragmentFull = (data) => {
+        let dataKeys = Object.keys(data)
+        let lastPosition = dataKeys[dataKeys.length - 1]
+        let lastFragment = data[lastPosition]; 
 
-
-    const plotData = (e) => {
-        console.log(tempDataPlot);
-        setDataPlot(Object.values(tempDataPlot));
-        console.log(dataPlot)
+        return Object.keys(lastFragment).length === 5 ? true : false;
+    }
+    const handleTableChange = (e,data) => {
+        if(isLastFragmentFull(data))
+            fragmentsDataRepeatability = data;
     }
 
-    const deleteRow = (e) => {
-        e.stopPropagation()
-        e.preventDefault()
-        setDataRowsComponent(prevDataRowsComponent => [
-            ...prevDataRowsComponent.filter((data) => {
-                return data.key !== e.target.parentNode.parentNode.parentNode.id
-            }),
-        ]);
-        let rowKey = e.target.parentNode.parentNode.classList[0];
-        delete dataRows[rowKey];
-        let index = rowKey.split("row")[1];
-        let prevIndex = index-1;
-        if(prevIndex >= 0){
-            document.getElementsByClassName(`containerRow${prevIndex}`)[0].firstElementChild.style.display = "flex";
+    useEffect(() => {
+        requestDeterminationsData();
+    },[])
+
+    const getRepeatabilityData = async (e) => {
+        const actualDate = new Date();
+        
+        let body = {
+            repeatability_date: `${actualDate.getFullYear()}-${actualDate.getMonth()}-1`,
+            determination_id : e.target.value
         }
-        delete tempDataPlot[index];
-        setDataPlot(Object.values(tempDataPlot));
+
+        let response = await fetch(`${BASE_URL}${PORT}/repeatability/get`,{
+            method:"POST",
+            headers:{ "Content-Type": "application/json"},
+            body:JSON.stringify(body)
+        });
+        
+        let jsonData = await handleResponse(response);
+
+        document.getElementById("repeatability_id").setAttribute("repeatability_id",jsonData["repeatability_id"]);
+        document.getElementById("repeatability_id").setAttribute("header_id",jsonData["header_id"]);
+
+        jsonData['equipment_name'] = jsonData['equipment_name'] === undefined ? "" : jsonData['equipment_name'];
+        jsonData['analytic_method_name'] = jsonData['analytic_method_name'] === undefined ? "" : jsonData['analytic_method_name'];
+        jsonData['analytic_technique_name'] = jsonData['analytic_technique_name'] === undefined ? "" : jsonData['analytic_technique_name'];
+        jsonData['controller_concentration'] = jsonData['controller_concentration'] === undefined ? "" : jsonData['controller_concentration'];
+        jsonData['temperature_value'] = jsonData['temperature_value'] === undefined ? "" : jsonData['temperature_value'];
+        jsonData['controller_id'] = jsonData['controller_id'] === undefined ? "" : jsonData['controller_id'];
+        jsonData['controller_commercial_brand'] = jsonData['controller_commercial_brand'] === undefined ? "" : jsonData['controller_commercial_brand'];
+        jsonData['institution_id'] = jsonData['institution_id'] === undefined ? "" : jsonData['institution_id'];
+
+        if(jsonData['is_commercial_serum']){
+            setIsCommercial(true);
+        }
+
+        setDataRows(jsonData['table_fragments'] == undefined ? [] : jsonData['table_fragments'].map((d) => {
+            d.date = d.date.split("T")[0]
+            return d
+        }));
+
+        return jsonData;
+        
     }
-    const search = (e) => {
-        let tbody = document.getElementById("data-container");
-        let tr = tbody.querySelectorAll("tr");
-        if(e.target.value === ''){
-            for(let i =0;i<tr.length;i++){
-                tr[i].style.display = "table-row";
+
+    const handleFormFieldChange = async (e) => {
+        let name = e.target.getAttribute("name");
+        let value = e.target.value == "" ? e.target.getAttribute("value") : e.target.value;
+        
+        setFormData((prevData) => ({...prevData,[name] : value}));
+        setFormDataErrors((prevData) => ({...prevData,[name] : value === ""}));
+
+        console.log(name,value)
+        if(e.target.getAttribute("name") === "determination_id"){
+            let data = await getRepeatabilityData(e)
+            data[name] = value;
+            setFormData(data);
+        }
+        console.log(formData)
+
+    }
+
+    const handlePlotDataClick =  async (e,data) => {
+        let nArray = [];
+        let differenceArray = [];
+        let keys_data = Object.keys(data);
+
+        for(let i = 0;i < keys_data.length;i++){
+            let actual_key = keys_data[i];
+            let data_object = data[actual_key];
+
+            nArray.push(data_object["n"]);
+            differenceArray.push(data_object["d1_d2"]);            
+        }
+        let body = {
+            "totalNSum":nArray.length,
+            "differenceArray":differenceArray,
+        }
+
+        let response = await fetch(`${BASE_URL}${PORT}/deviations`,{
+            method:"POST",
+            headers:{ "Content-Type": "application/json"},
+            body:JSON.stringify(body)
+        });
+        let jsonData = await handleResponse(response);
+    }
+
+
+    const handleSubmitRepeatabilityData= async (e) => {
+        let keysDataRepeatability = Object.keys(fragmentsDataRepeatability);
+        let tableFragments = [];
+        for(let i = 0; i < keysDataRepeatability.length;i++){
+            let actualRow = keysDataRepeatability[i];
+            let actualObject = fragmentsDataRepeatability[actualRow];
+            let keysActualObject = Object.keys(actualObject);
+
+            let canPush = true;
+            for(let g = 0;g < keysActualObject.length;g++){
+                if(actualObject[keysActualObject[g]] === "")
+                    canPush = false
             }
-        }else{
-            let continueLooping = false;
-            for(let i =0;i<tr.length;i++){
-                let children = tr[i].querySelectorAll("input")
-                for(let x =0;x<children.length;x++){
-                    continueLooping = false;
-                    if(children[x].value === e.target.value){
-                        continueLooping = true;
-                        tr[i].style.display = "table-row";
-                        break
-                    }
-                }
-                if(!continueLooping) tr[i].style.display = "none";
-            } 
+
+            if(canPush){
+                console.log(actualObject)
+                tableFragments.push(actualObject)
+            }
+        } 
+        let repeatability_id = document.getElementById("repeatability_id");
+        const actualDate = new Date();
+
+        formFieldsObject = formData;
+        console.log("formFieldsObject",formFieldsObject,formData)
+        formFieldsObject["header_id"] = repeatability_id.getAttribute("header_id");
+        formFieldsObject["repeatability_id"] = repeatability_id.getAttribute("repeatability_id");
+        formFieldsObject["repeatability_date"] = `${actualDate.getFullYear()}-${actualDate.getMonth()}-1`;
+
+        let keysFormField = Object.keys(formFieldsObject);
+        let tempErrors = formDataErrors;
+
+        for(let i = 0;i < keysFormField.length;i++){
+            if(formFieldsObject[keysFormField[i]] === ""){
+                tempErrors[keysFormField[i]] = true;
+            }else{
+                tempErrors[keysFormField[i]] = false;
+            }
         }
+        setFormDataErrors(tempErrors);
+
+        if(formFieldsObject["is_commercial_serum"] === undefined){
+            formFieldsObject["is_commercial_serum"] = false;
+        }
+
+        let body = {
+            "formHeaders":formFieldsObject,
+            "tableFragments":tableFragments
+        }
+
+        let response = await fetch(`${BASE_URL}${PORT}/repeatability`,{
+            method:"POST",
+            headers:{ "Content-Type": "application/json"},
+            body:JSON.stringify(body)
+        });
+
+        let jsonData = await handleResponse(response);
+        console.log("jsonData",jsonData)
+        document.getElementById("repeatability_id").setAttribute("repeatability_id",jsonData['repeatability_data']['repeatability_id']);
+        document.getElementById("repeatability_id").setAttribute("header_id",jsonData['table_header']['header_id']);
     }
 
     const handleCommercialStatus = (e) => {
         setIsCommercial(!isCommercial);
     }
+
+    const handlePlotData = (e,data) => {
+        let dates = [];
+        let data_ = [];
+
+        let keysData = Object.keys(data);
+
+        for(let i =0;i < keysData.length;i++){
+            if(data[keysData[i]]?.date)
+                dates.push(data[keysData[i]]?.date)
+            if(data[keysData[i]]?.d1_d2)
+                data_.push(data[keysData[i]]?.d1_d2)
+        }
+        setData(data_);
+        setDates(dates);
+    }
+
+    let buttons = [
+        {
+            name:'plot-data',
+            svgComponent:<About1Svg/>,
+            action:'custom',
+            callback:(e,data) => {handlePlotData(e,data)}
+        },
+        {
+            name:'add-row',
+            svgComponent:<AddSvg/>,
+            action:'add',
+            callback:(type,e) => {console.log(e)}
+        },    
+        {
+            name:'edit-row',
+            svgComponent:<SaveSvg/>,
+            secondSvgComponent:<EditSvg/>,
+            action:'edit',
+            callback:(type,e) => {console.log(e)}
+        },  
+        
+        {
+            name:'delete-row',
+            svgComponent:<TrashSvg/>            ,
+            action:'delete',
+            callback:(type,e) => {console.log(e)}
+        },  
+    ];
+
+    let columns = [{
+        name:'n',
+        label:'N',
+        svgComponent:<N/>,
+        options:{
+            handleChange:handleTableChange
+        }
+    },
+    {
+        name:'date',
+        label:'Fecha',
+        svgComponent:<DateSvg/>,
+        options:{
+            handleChange:handleTableChange
+        }
+    },
+    {
+        name:'d1',
+        label:
+            <span>d
+                <sub>1</sub>
+            </span>,
+        svgComponent:<D1D2/>,
+        options:{
+            handleChange:handleTableChange
+        }
+    },
+    {
+        name:'d2',
+        label:
+            <span>d
+                <sub>2</sub>
+            </span>,
+        svgComponent:<D1D2/>,
+        options:{
+            handleChange:handleTableChange
+        }
+    },
+    {
+        name:'d1_d2',
+        label:
+            <span>|d
+                <sub>1</sub>
+                -
+                d
+                <sub>2|</sub>
+            </span>,
+        svgComponent:<D1AndD2/>,
+        options:{
+            calculable:{
+                fields:['d1','d2'],
+                operation:'-',
+            } 
+        }
+    },
+    ];
+
+    let state = {
+          
+        series: [{
+          name: "d1_d2",
+          data: data
+        }],
+        options: {
+          chart: {
+            height: 350,
+            type: 'area'
+          },
+          dataLabels: {
+            enabled: false
+          },
+          stroke: {
+            curve: 'smooth'
+          },
+          xaxis: {
+            type: 'datetime',
+            categories: dates
+          },
+          tooltip: {
+            x: {
+              format: 'dd/MM/yy HH:mm'
+            },
+          },
+        },
+      
+      
+      };
+
+    const handleChangeController = (e) => {
+        console.log(controllersData[e.target.getAttribute("index")]);
+        handleFormFieldChange(e)
+    }
+
     return (
         <section className="TableContainer">
             <form className="side-form">{/*institucion fecha componente patron equipo metodo concentracion patron temperatura */}
-                <div className="ContInpPlaceholder">
-                    <InstitutionSvg/>
-                    <input className="extra-width blue-border left-alignment" name="institution" type="text" required/>
-                    <label className="placeholder" htmlFor="institution">Institución</label>
-                </div>
-                <div className="ContInpPlaceholder">
+                <input type="hidden" id="repeatability_id" name="repeatability_id" repeatability_id={-1} header_id={-1}/>
+                <div className={`ContInpPlaceholder ${formDataErrors.determination_id ? 'error' : ''}`}>
                     <ComponentSvg/>
-                    <input className="extra-width blue-border left-alignment" name="components" type="text" required/>
-                    <label className="placeholder" htmlFor="component">Determinación</label>
+                    <div className="custom-select-wrapper">
+                        <CustomSelect customClassName={"capitalize-text"} selectedValue = {formData.determination_id} onChange={handleFormFieldChange} name="determination_id" placeholder={"Determinación"} searchable={true} noResults={"Sin Opciones"} noOPtions={"Sin Opciones"} data={determinationData} placeholderSearchBar={"Buscar.."}/>
+                    </div>
                 </div>
-                <div className="ContInpPlaceholder">
+                <div className={`ContInpPlaceholder ${formDataErrors.institution_id ? 'error' : ''}`}>
+                    <InstitutionSvg/>
+                    <div className="custom-select-wrapper">
+                        <CustomSelect onChange={handleFormFieldChange} selectedValue = {formData.institution_id} name="institution_id" placeholder={"Institución"} searchable={true} noResults={"Sin Opciones"} noOPtions={"Sin Opciones"} data={institutionsData} placeholderSearchBar={"Buscar.."}/>
+                    </div>
+                </div>
+                <div className={`ContInpPlaceholder ${formDataErrors.equipment_name ? 'error' : ''}`}>
                     <EquipmentSvg/>
-                    <input className="extra-width blue-border left-alignment" name="equipment" type="text" required/>
-                    <label className="placeholder" htmlFor="equipment">Equipo</label>
+                    <input onChange={handleFormFieldChange} value={formData.equipment_name} className="medium-width blue-border small-height left-alignment form-input" name="equipment_name" type="text" required/>
+                    <label className="placeholder form-label" htmlFor="equipment">Equipo</label>
                 </div>
-                <div className="ContInpPlaceholder">
+                <div className={`ContInpPlaceholder ${formDataErrors.analytic_method_name ? 'error' : ''}`}>
                     <PatternSvg/>
-                    <input className="extra-width blue-border left-alignment" name="method" type="text" required/>
-                    <label className="placeholder" htmlFor="method">Método analítica</label>
+                    <input onChange={handleFormFieldChange} value={formData.analytic_method_name} className="medium-width blue-border small-height left-alignment form-input" name="analytic_method_name" type="text" required/>
+                    <label className="placeholder form-label" htmlFor="analytic_method">Método analítica</label>
                 </div>
-                <div className="ContInpPlaceholder">
+                <div className={`ContInpPlaceholder ${formDataErrors.analytic_technique_name ? 'error' : ''}`}>
                     <MethodSvg/>
-                    <input className="extra-width blue-border left-alignment" name="method" type="text" required/>
-                    <label className="placeholder" htmlFor="method">Técnica analítico</label>
+                    <input onChange={handleFormFieldChange} value={formData.analytic_technique_name} className="medium-width blue-border small-height left-alignment form-input" name="analytic_technique_name" type="text" required/>
+                    <label className="placeholder form-label" htmlFor="analytic_technique">Técnica analítico</label>
                 </div>
-                <div className="ContInpPlaceholder">
-                    <ConcentrationSvg/>
-                    <input className="extra-width blue-border left-alignment" name="concentration" type="text" required/>
-                    <label className="placeholder" htmlFor="concentration">Concentración controlador</label>
-                </div>
-                <div className="ContInpPlaceholder">
+                <div className={`ContInpPlaceholder ${formDataErrors.temperature_value ? 'error' : ''}`}>
                     <TemperatureSvg/>
-                    <input className="extra-width blue-border left-alignment" name="temperature" type="text" required/>
-                    <label className="placeholder" htmlFor="temperature">Temperatura</label>
+                    <input onChange={handleFormFieldChange} value={formData.temperature_value} className="blue-border left-alignment small-height form-input" name="temperature_value" type="text" required/>
+                    <label className="placeholder form-label" htmlFor="temperature">Temperatura</label>
+                    <div className="custom-select-wrapper-small">
+                        <CustomSelect name="temperature_type_id" selectedValue = {formData.temperature_type_id} onChange={handleFormFieldChange} placeholder={"Tipo"} searchable={true} noResults={"Sin Opciones"} noOPtions={"Sin Opciones"} data={temperatureData} placeholderSearchBar={"Buscar.."}/>
+                    </div>
                 </div>
-                <div className="ContInpPlaceholder">
+                <div className={`ContInpPlaceholder ${formDataErrors.controller_id ? 'error' : ''}`}>
                     <ConcentrationSerumSvg/>
-                    <input className="extra-width blue-border left-alignment" name="pattern" type="text" required/>
-                    <label className="placeholder" htmlFor="pattern">Controlador</label>
+                    <div className="custom-select-wrapper">
+                        <CustomSelect name="controller_id" selectedValue = {formData.controller_id} onChange={handleChangeController} placeholder={"Controlador"} searchable={true} noResults={"Sin Opciones"} noOPtions={"Sin Opciones"} data={controllersData} placeholderSearchBar={"Buscar.."}/>
+                    </div>
+                </div>
+                
+                <div className={`ContInpPlaceholder ${formDataErrors.controller_concentration ? 'error' : ''}`}>
+                    <ConcentrationSvg/>
+                    <input onChange={handleFormFieldChange} value={formData.controller_concentration} className="medium-width blue-border small-height left-alignment form-input" name="controller_concentration" type="text" required/>
+                    <label className="placeholder form-label" htmlFor="concentration">Concentración controlador</label>
                 </div>
                 {isCommercial &&
-                <div className="ContInpPlaceholder">
+                <div className={`ContInpPlaceholder ${formDataErrors.controller_commercial_brand ? 'error' : ''}`}>
                     <SerumSvg/>
-                    <input className="extra-width blue-border left-alignment" name="pattern" type="text" required/>
-                    <label className="placeholder" htmlFor="pattern">Marca Comercial</label>
+                    <input onChange={handleFormFieldChange} value={formData.controller_commercial_brand} className="medium-width blue-border small-height left-alignment form-input" name="controller_commercial_brand" type="text" required/>
+                    <label className="placeholder form-label" htmlFor="pattern">Marca Comercial</label>
                 </div>
                 }
                 <div className="ContInpCheckbox">
-                    <input className="blue-border left-alignment" name="commercial_check" onClick={handleCommercialStatus} type="checkbox" required/>
+                    <input className="blue-border left-alignment" id="commercial_check" name="commercial_check" checked={isCommercial} onChange={handleCommercialStatus} type="checkbox"/>
                     <label className="placeholder" htmlFor="commercial_check">Es un suero comercial</label>
                 </div>
-                <input type="submit" className="extra-width blue-border" id="submitFormButton" value="Guardar"/>
+                <input type="button" className="extra-width blue-border small-height" id="submitFormButton" onClick={handleSubmitRepeatabilityData} value="Guardar"/>
                 
             </form>
             <div className="left-alignment short-margin-top container">
                 <div className="short-margin-left current-date">{new Date().toLocaleDateString("es-MX",{ weekday:'long', day:'numeric', month:'long', year:'numeric' })}</div>
-                <table id="table-repeatability">
-                    <thead>
-                        <tr>
-                            <td>
-                                <div className="flex-container extra-gap no-margin">
-                                    <div className="parent-svg">
-                                        <DownloadCsvSvg/>
-                                    </div>
-                                    <div className="parent-svg">
-                                        <PrintSvg/>
-                                    </div>
-                                </div>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td colSpan={6}>
-                                <div className="flex-container search">
-                                    <SearchSvg/>
-                                    <input id="search" onInput={search} className="blue-border" placeholder="Buscar..."/>
-                                </div>
-                            </td>
-                        </tr>
-                        <tr>
-                            <th>
-                                <div className="flex-container">
-                                    <N/> N
-                                </div>
-                            </th>
-                            <th>
-                                <div className="flex-container">
-                                    <DateSvg/>Fecha
-                                </div>
-                            </th>
-                            <th>
-                                <div className="flex-container">
-                                    <D1D2/>
-                                    <span>d
-                                        <sub>1</sub>
-                                    </span>
-                                </div>
-                            </th>
-                            <th>
-                                <div className="flex-container">
-                                    <D1D2/>
-                                    <span>d
-                                        <sub>2</sub>
-                                    </span>
-                                </div>
-                            </th>
-                            <th>
-                                <div className="flex-container">
-                                    <D1AndD2/>
-                                    <span>|d
-                                        <sub>1</sub>
-                                        -
-                                        d
-                                        <sub>2|</sub>
-                                    </span>
-                                </div>
-                            </th>
-                            <th></th>
-                        </tr>
-                        
-                    </thead>
-                    <tbody id="data-container" className="data-container">
-                        {dataRowsComponent.length === 0 ? <tr>
-                            <td colSpan={5} className="no-data-column">
-                                <div className="flex-container no-margin-top">
-                                    <p>No hay datos por el momento</p> <div onClick={addRow} className="update-data-icons add-row">
-                                        <AddSvg/>
-                                    </div>
-                                </div>
-                            </td>
-                        </tr> :
-                        dataRowsComponent.map((data) => {
-                            return (
-                                data
-                            );
-                        })
-                        }
-                    </tbody>
-                </table>    
+                <Table columns={columns} data={dataRows} buttons={buttons} />
             </div>
-            {Object.keys(dataPlot).length > 0 && <DemoLine data={dataPlot}/>}            
+            <div className="report-graph">
+                <ReactApexChart options={state.options} series={state.series} type="area" height={350} />
+            </div>
+            {/* {Object.keys(dataPlot).length > 0 && <DemoLine data={dataPlot}/>}             */}
         </section>
     );
 }
+export default Repeatability;

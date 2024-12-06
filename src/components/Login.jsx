@@ -1,21 +1,25 @@
 
-import { useState } from "react";
+import { useContext, useState } from "react";
+import { ApiContext } from "./ApiContext.jsx";
 import  "../style-sheets/Login.css";
 import { Error } from "./Error";
-import { useDispatch } from "react-redux";
-import { setAuth } from "../redux/reducers/Authslice";
+import { useDispatch,useSelector } from "react-redux";
+import { showAlert } from "../redux/actions/customAlertAction";
 import { UserSvg } from "./svg_components/UserSvg";
 import { PasswordSvg } from "./svg_components/PasswordSvg";
 import bcrypt from 'bcryptjs';
-
+import { Alert } from "./alert_components/Alert/Alert.js";
+import { useLocation } from "react-router-dom";
 
 // import { jwt } from 'jwt-decode';
 // import { Cookies } from 'universal-cookie';
 
 export const Login = ({navigate}) => {
-    const port = 5000;
+    const { BASE_URL,PORT } = useContext(ApiContext);
+    
     const dispatch = useDispatch();
-
+    const location = useLocation();
+    const from = location.state?.from?.pathname || "/Home";
 
     const[userData,SetUserData] = useState({
         name:"",
@@ -34,86 +38,91 @@ export const Login = ({navigate}) => {
         userData[name] = value;
     }
     const errorMsg = () => {
-        console.log(error)
         if (error.errorAuth){
-            console.log("here")
-            return <Error msg="Usuario o contraseña incorrectos"/>
-        }else if(error.errorServ){
-            return <Error msg="Error en servidor"/>;
+            // dispatch(showAlert('Usuario o contraseña incorrectos', 3000));
+            Alert.fire({
+                "text":"Usuario o contraseña incorrectos",
+                "type":"error"
+            })
+        }else if(error.errorServer){
+            Alert.fire({
+                "text":"Error en servidor",
+                "type":"error"
+            })
+            // dispatch(showAlert('Error en servidor', 3000));
         }
     }
 
     
 
-    async function log(e){
+    async function login(e){
         e.preventDefault();
         try {
-            
-            let name = userData.name;
-            let body = {
-                name
-            };
-            let response = await fetch(`http://localhost:${port}/getPassword`,{
-                method:"POST",
-                headers:{ "Content-Type": "application/json"},
-                body:JSON.stringify(body)
-            });
-            let jsonData = await response.json();
-            let password = userData.password;
-            userData.password = "";
-            // const salt = await bcrypt.genSaltSync(10);    
-            // const hashPassword = await bcrypt.hashSync(password, salt);
-            let match = await bcrypt.compareSync(password,jsonData[0]['password']);
-            password = "";
-            if(!match){
-                setError((prevData) => ({...prevData,errorAuth:true}));
-            }else{
-                setError((prevData) => ({...prevData,errorServ:false,errorAuth:false}));
-                body = {
-                    name
-                };
-                response = await fetch(`http://localhost:${port}/getUser`,{
-                    method:"POST",
-                    headers:{ "Content-Type": "application/json"},
-                    body:JSON.stringify(body)
-                });
-                jsonData = await response.json();
+            let response = await fetch(`${BASE_URL}${PORT}/users/ci/${userData.ci}`,);
 
-                userData.role = jsonData[0]['role'];
-                userData.ci = jsonData[0]['ci'];
-                let token = jsonData[0]['token'];
+            let jsonData = await response.json();
+
+            if((jsonData.code == 409 && response.status == 409) || (jsonData.code == 500 && response.status == 500)){
+                setError((prevData) => ({...prevData,errorAuth:true}));
+                return;
+            }
+
+            let fetchedData = jsonData.result[0];
+            let match = bcrypt.compareSync(userData.password,fetchedData['password']);
+            
+            if(!match)
+                setError((prevData) => ({...prevData,errorAuth:true}));
+            else{
+                setError((prevData) => ({...prevData,errorServer:false,errorAuth:false}));
+
+                userData.role = fetchedData['role'];
+                userData.name = fetchedData['name'];
+                userData.ci = fetchedData['ci'];
+                console.log(fetchedData,fetchedData['name'])
+                userData.deep_level = fetchedData['role_deep_level'];
+                let token = fetchedData['token'];
+                console.log(token,token.role_deep_level)
+                document.cookie = `auth_token=${token}; max-age=3600; path=/`;
+                document.cookie = `user_name=${userData.name[0].toUpperCase() + userData.name.slice(1,userData.name.length)}; max-age=3600; path=/`;
+                document.cookie = `user_deep_level=${userData.deep_level}; max-age=3600; path=/`;
+                navigate("/",{replace : true});
                 
-                dispatch(setAuth({isAuth:true}))
-                document.cookie = 'auth_token=' + token + '; max-age=3600; path=/';
-                document.cookie = 'user_name=' + userData.name[0].toUpperCase() + userData.name.slice(1,userData.name.length) + '; max-age=3600; path=/';
-                navigate("/");
+                Alert.fire({
+                    "text":"Todo Bien!",
+                    "type":"success"
+                })
             }
 
         } catch (error) {
-            setError((prevData) => ({...prevData,errorServ:true}));
+            console.log(error)
+            setError((prevData) => ({...prevData,errorServer:true}));
         }
     
     }
 
     return(
-        <div className="FormDiv">
-    <form action="" onSubmit={log} className="formLogin" autoComplete='off'>
-    <p className="LoginP" >Registrarse</p>
-    <div className="error no-background-color display-block">
-    {(error.errorAuth || error.errorServ) && errorMsg()}
-    </div> 
-    <div className="ContInpPlaceholder ContInpPlaceholderLog ContInpPlaceholderUser">
-        <input autoComplete='off' id="user" className="no-padding inputLogin" onChange={handlerInputs} name="name" required ></input>
-        <label className="placeholder" htmlFor="user">Usuario</label>
-        { <UserSvg/> } 
-    </div>
-    <div className="ContInpPlaceholder ContInpPlaceholderLog ContInpPlaceholderPassword">
-        <input autoComplete='off' id="password" className="no-padding inputLogin"  onChange={handlerInputs} name="password" type="password" required></input>
-        <label className="placeholder" htmlFor="password">Contraseña</label>
-        { <PasswordSvg/> }
-    </div>
-            <button className="buttonLogin" type="reset" onClick={log}>Iniciar sesión</button>
-        </form>
+        <div className="loginPaddingDiv">
+            
+            <div className="loginCard">
+                <div className="container-login-image">
+                    <img src={require("../resources/test/2/3800315.jpg")} alt="logo"/>
+                </div>
+                <form action="" onSubmit={login} className="formLogin" autoComplete='off'>
+                    <p className="LoginP" >Login</p>
+                    {(error.errorAuth || error.errorServer) && errorMsg()}
+                    <div className="ContInpPlaceholder ContInpPlaceholderLog">
+                        <input autoComplete='off' id="ci" className="no-padding inputLogin" onChange={handlerInputs} name="ci" required ></input>
+                        <label className="placeholder" htmlFor="ci">CI</label>
+                        { <UserSvg/> } 
+                    </div>
+                    <div className="ContInpPlaceholder ContInpPlaceholderLog">
+                        <input autoComplete='off' id="password" className="no-padding inputLogin"  onChange={handlerInputs} name="password" type="password" required></input>
+                        <label className="placeholder" htmlFor="password">Contraseña</label>
+                        { <PasswordSvg/> }
+                    </div>
+                    <button className="buttonLogin" type="reset" onClick={login}>Iniciar sesión</button>
+                </form>
+            </div>
         </div>
     )
 }

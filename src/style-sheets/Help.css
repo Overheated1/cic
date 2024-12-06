@@ -5,11 +5,12 @@
 }
 .help-step{
     color: #fff;
-    background-color: rgb(131, 131, 194);
+    background-color: var(--main-color);
     width: 15em;
     padding: 1em;
     font-size: .8em;
     border-radius: .6em;
+    cursor: pointer;
 }
 form.top-alignment{
     justify-content: flex-start;
@@ -19,5 +20,37 @@ form.top-alignment{
     filter: saturate(60%);
 }
 .current-step{
-    background-color: rgb(61, 61, 146);
+    background-color: #323d74;
+}
+.help-container-data{
+    display: none;
+    margin: 6%;
+}
+.current-container{
+    display: flex;
+    flex-direction: column;
+    font-size: 1.6em;
+    gap: 2em;
+
+}
+.main-title-help{
+    font-weight: 600;
+    font-size: 1.3em;
+    text-align: left;
+}
+.grid-2-columns-help-item{
+    display: grid;
+    grid-template-columns: 2% 98%;
+    justify-content: flex-start;
+    align-items: flex-start;
+}
+.help-item-text{
+    text-align: left;
+}
+
+.medium-ball{
+    height: 1em;
+    width: 1em;
+    border-radius: 50%;
+    background-color: #323d74;
 }

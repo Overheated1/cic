@@ -1,6 +1,4 @@
 import '../style-sheets/About.css';
-import { About1Svg } from './svg_components/About1Svg';
-import { About2Svg } from './svg_components/About2Svg';
 import { AboutCard1Svg } from './svg_components/AboutCard1Svg';
 import { AboutCard2Svg } from './svg_components/AboutCard2Svg';
 import { AboutCard3Svg } from './svg_components/AboutCard3Svg';
@@ -12,7 +10,7 @@ import  MicroscopeSvg  from '../resources/svg/microscope.svg';
 import  LaboratorySvg  from '../resources/svg/cientifics-brain.svg';
     
 
-export const About = () => {
+const About = () => {
     return (
     <div className="about-container">
         <h1 className='title'>CIC: CONTROL INTERNO DE CALIDAD</h1>
@@ -28,13 +26,13 @@ export const About = () => {
                 </p>
             </div>
             <div>
-                <img src={ MicroscopeSvg } alt="microscope"/>
+                <img loading="lazy" src={ MicroscopeSvg } alt="microscope"/>
                 {/* <About1Svg/> */}
             </div>
         </div>
         <div className='full-width'>    
             <h2 className="large-extra-font-size">Beneficios del proyecto</h2>
-            <div className="flex-container spaced-components">
+            <div className="flex-container container-cards spaced-components">
                 <div className="card">
                     <div className="flex-container column-flex extra-gap">
                         <AboutCard1Svg/>
@@ -75,7 +73,7 @@ export const About = () => {
         
         <div className='full-width'>    
             <h2 className="large-extra-font-size">Características del sistema</h2>
-            <div className="flex-container spaced-components">
+            <div className="flex-container container-cards spaced-components">
                 <div className="card">
                     <div className="flex-container column-flex extra-gap">
                         <AboutCard6Svg/>
@@ -98,7 +96,7 @@ export const About = () => {
         </div>
         <div className="grid-two-columns">
             <div>
-                <img src={ LaboratorySvg } alt="laboratory"/>
+                <img loading="lazy" src={ LaboratorySvg } alt="laboratory"/>
             </div>
             <div>
                 <h2 className="large-extra-font-size">Objetivos del proyecto</h2>
@@ -124,3 +122,4 @@ export const About = () => {
     </div>
 );
 };
+export default About;

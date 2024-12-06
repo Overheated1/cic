@@ -1,7 +1,8 @@
-export const SampleElaboration = () => {
+const SampleElaboration = () => {
     return(
     <div className="Container">
         
     </div>
     )
 }
+export default SampleElaboration;
