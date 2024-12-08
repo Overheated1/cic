@@ -139,13 +139,13 @@ const Users = () => {
     return(
         <div className="users-section">
             <div className="flex-container flex-column no-margin">
-                <div className="card">
-                    <div className="self-align-center flex-container little-margin">
+                <div className="card card-alt-wth">
+                    <div className="self-align-center flex-container m01">
                         <span className="important-text">Usuarios</span>
                         |
                         <span className="gray-text subtitle-card">Año</span>
                     </div>
-                    <div className="main-container flex-container little-margin">
+                    <div className="main-container flex-container m01">
                         <div className="users-svg-container">
                             <AboutSvg/>
                         </div>
@@ -160,13 +160,13 @@ const Users = () => {
                         </div>
                     </div>
                 </div>
-                <div className="card to-do-list-container">
-                    <div className="self-align-center flex-container little-margin ">
+                <div className="card to-do-list-container card-alt-wth">
+                    <div className="self-align-center flex-container m01 ">
                         <span className="important-text">Actividades recientes</span>
                         |
                         <span className="gray-text subtitle-card">Hoy</span>
                     </div>
-                    <div className="main-container no-gap full-width flex-container flex-column little-margin">
+                    <div className="main-container no-gap full-width flex-container flex-column m01">
                         <div className="list-item full-width">
                             <div className="grid-3-columns">
                                 <div className="time gray-text">2 min</div>
@@ -221,7 +221,7 @@ const Users = () => {
                 </div>
             </div>
             <div className="table-container">
-                <Table columns={columns} data={userData} buttons={buttons}/>
+                <Table tableTitle={"Usuarios"} columns={columns} data={userData} buttons={buttons}/>
             </div>
         </div>
     )

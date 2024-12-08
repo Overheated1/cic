@@ -4,7 +4,7 @@
 }
 
 .NavbarWrapper {
-    font-size: .7em;
+    font-size: var(--fnt-sz014);
     position: sticky;
     top: 0;
     display: flex;
@@ -35,7 +35,7 @@
 }
 
 .dropdown__content .item {
-    font-size: 1.3em;
+    font-size: var(--fnt-sz012);
     padding: .4em 1.5em;
     text-decoration: none;
     color: #000000;
@@ -63,14 +63,13 @@
     margin-top: .6em;
     margin-right: 2em;
     height: 3em;
-    font-size: .6em;
+    font-size: var(--fnt-sz012);
 }
 
 .dropdown {
     display: flex;
     gap: .3em;
     padding: .1em 4em .1em .1em;
-    font-size: 1.6em;
     position: relative;
     z-index: 1;
     margin-right: 8em;
@@ -84,7 +83,7 @@
 
 .dropdown__li {
     width: 100%;
-    font-size: 1.2em;
+    font-size: var(--fnt-sz012);
 }
 
 .dropdown__list {
@@ -173,7 +172,7 @@
 .dropdown__content {
     display: none;
     border-radius: .2em;
-    font-size: .6em;
+    font-size: var(--fnt-sz012);
     background-color: #fff;
     box-shadow: 0 0 2px #000;
     border-top: none;
@@ -183,7 +182,7 @@
     position: absolute;
     display: flex;
     flex-direction: column;
-    top: 4em;
+    top: 2.5vw;
 }
 
 .dropdown__li .item:hover {
@@ -331,7 +330,7 @@
     .NavSelect {
         position: absolute;
         left: .8em;
-        font-size: 1.2em;
+        font-size: var(--fnt-sz012);
         bottom: 4em;
 
         background-color: rgb(255, 255, 255);
@@ -378,7 +377,7 @@
     }
 
     .dropdown__span {
-        font-size: 1.6em;
+        font-size: var(--fnt-sz012);
     }
 
     .bottom-line,
@@ -450,7 +449,7 @@
     }
 
     .dropdown__content .item {
-        font-size: 1.2em;
+        font-size: var(--fnt-sz012);
     }
 
     .user-name-letter {
@@ -461,7 +460,7 @@
 
     .gret {
         margin-top: 2em;
-        font-size: 1.3em;
+        font-size: var(--fnt-sz012);
         color: #000000;
     }
 

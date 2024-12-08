@@ -1,17 +1,20 @@
+
 .grid-2-columns{
     display: grid;
-    grid-template-columns: repeat(2,max-content);
+    grid-template-columns: repeat(2,30vw);
     gap: 1.5em;
-    width: 65%;
     justify-content: center;
     align-items: flex-start;
 }
+
 .container-cards-admin{
     display: flex;
     align-items: flex-start;
     justify-content: center;
 }
-.little-margin{
+
+/* small  margin */
+.m01{
     margin: 1em;
 }
 .admin-panel{
@@ -39,13 +42,13 @@
 .main-text{
     color: #000;
     font-weight: 800;
-    font-size: 3em;
+    font-size: var(--fnt-sz020);
 }
 .grid-3-columns{
     display: grid;
     grid-template-columns: 20% 10% 70% ;
     width: 100%;
-    min-height: 5.1em;
+    min-height: 4vw;
 }
 .time-line-fragment{
     background-color: #bbbbbb76;
@@ -56,7 +59,7 @@
     gap: 0;
 }
 .list-item{
-    font-size: 1.3em;
+    font-size: var(--fnt-sz016);
 }
 
 .activity-text{
@@ -130,7 +133,7 @@
     align-items: center;
 }
 
-.self-align-center{
+.self-align-left{
     align-self:flex-start;
 } 
 
@@ -141,7 +144,7 @@
 .important-text{
     color: #000;
     font-weight: 600;
-    font-size: 1.4em;
+    font-size: var(--fnt-sz016);
 }
 
 .increase-text{
@@ -153,7 +156,7 @@
     display: flex;
     flex-direction: column;
     gap: 1em;
-    font-size: 1.2em;
+    font-size: var(--fnt-sz016);
 
 }
 
@@ -171,7 +174,7 @@
     color: #6f6f6fd6;
 }
 .subtitle-card{
-    font-size: 1.2em;
+    font-size: var(--fnt-sz016);
 }
 
 .card{
@@ -180,8 +183,18 @@
     box-shadow: 0 2px 6px #48484845;
     justify-content: center;
     border-radius: .8em;
-    min-width: 40em;
+    padding: 1vw;
 }
+
+.card-alt-wth{
+    width: var(--wth030);
+}
+
 .report-graph{
     width: 85%;
+}
+
+/* max width 25 */
+.max-wdt025{
+    max-width: 25vw;
 }

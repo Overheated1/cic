@@ -5,7 +5,7 @@
     right: -50%;
     transition: right .5s;
     border-radius: .3em;
-    font-size: 1.5em;
+    font-size: var(--fnt-sz016);
     background-color: #fff;
     display: grid;
     align-items: center;
@@ -76,7 +76,7 @@ img.alert-info{
         right: -50%;
         transition: right .5s;
         border-radius: .3em;
-        font-size: 1.5em;
+        font-size: var(--fnt-sz016);
         background-color: #fff;
         display: grid;
         align-items: center;

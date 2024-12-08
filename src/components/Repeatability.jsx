@@ -456,7 +456,7 @@ const Repeatability = () => {
             </form>
             <div className="left-alignment short-margin-top container">
                 <div className="short-margin-left current-date">{new Date().toLocaleDateString("es-MX",{ weekday:'long', day:'numeric', month:'long', year:'numeric' })}</div>
-                <Table columns={columns} data={dataRows} buttons={buttons} />
+                <Table tableTitle={"Repetibilidad"} columns={columns} data={dataRows} buttons={buttons} />
             </div>
             <div className="report-graph">
                 <ReactApexChart options={state.options} series={state.series} type="area" height={350} />

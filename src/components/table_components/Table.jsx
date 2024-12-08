@@ -6,8 +6,9 @@ import { AddSvg } from "../svg_components/AddSvg";
 import { DownloadCsvSvg } from "../svg_components/DownloadCsvSvg";
 import { PrintSvg } from "../svg_components/PrintSvg";
 import { Alert } from "../alert_components/Alert/Alert.js";
+import { ErrorSvg } from "../svg_components/ErrorSvg.jsx";
 
-export const Table = ({columns,buttons,data}) => {
+export const Table = ({columns,buttons,data,tableTitle}) => {
     let optionsPerName = {};
     let columnHeaders = [];
     let columnHeadersWithoutCalculable = [];
@@ -15,6 +16,7 @@ export const Table = ({columns,buttons,data}) => {
     var dataRows = {};
     let actualRow = "";
     const [dataRowsComponent,setDataRowsComponent] = useState([]);
+    const [isVisibleSearching,setIsVisibleSearching] = useState(false);
     var rowNumberActive = 0;
 
 
@@ -232,25 +234,41 @@ export const Table = ({columns,buttons,data}) => {
     return (
         <div id="custom-table">
             <div className = "thead flex-container flex-column left-alignment full-width">
-                <div className="large-padding left-alignment full-width flex-container flex-column">
-                    <div className="flex-container max-content extra-gap no-margin no-padding">
-                        <div className="parent-svg">
-                            <DownloadCsvSvg/>
+                <div className="left-alignment full-width flex-container flex-column">
+                    <div className="actions-container full-width extra-gap no-margin no-padding">
+                        <div className="table-left-part flex-container left-alignment full-width">
+                            { 
+                                isVisibleSearching ?
+                                    <div className="flex-container bottom-alignment no-padding search">
+                                        <SearchSvg/>
+                                        <input id="search" onInput={search}  placeholder="Buscar..."/>
+                                        <div className="close-handler-container" onClick={(e) => setIsVisibleSearching(false)}>
+                                            <ErrorSvg/>
+                                        </div>
+                                    </div>
+                                    :
+                                     <span>{tableTitle}</span>
+                            }
                         </div>
-                        <div className="parent-svg">
-                            <PrintSvg/>
+                        
+                        <div className="flex-container right-alignment extra-gap action-icons-container">
+                            <div className="parent-svg" onClick={(e) => setIsVisibleSearching(!isVisibleSearching)}>
+                                <SearchSvg/>
+                            </div>
+                            <div className="parent-svg">
+                                <DownloadCsvSvg/>
+                            </div>
+                            <div className="parent-svg">
+                                <PrintSvg/>
+                            </div>
                         </div>
-                    </div>
-                    <div className="flex-container search small-padding">
-                        <input id="search" onInput={search}  placeholder="Buscar..."/>
-                        <SearchSvg/>
                     </div>
                 </div>
                 <div className="table-grid-container">
                 {
                         columnHeaders.map((columnType) => {
                             return (
-                                <div className="flex-container th-cell full-width no-margin no-padding">
+                                <div key={uuid()} className="flex-container th-cell full-width no-margin no-padding">
                                     {columnType['svgComponent']} {columnType['label']}
                                 </div>
                             );

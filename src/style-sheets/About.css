@@ -8,10 +8,10 @@
     margin: 4em auto;
 }
 .extra-font-size{
-    font-size: 1.5em;
+    font-size: var(--fnt-sz016);
 }
 .large-extra-font-size{
-    font-size: 2em;
+    font-size: var(--fnt-sz020);
 }
 .spaced-components{
     gap: 3em;
@@ -38,7 +38,7 @@
     height: 20em;
     padding: 2em;
     border-radius: .4em;
-    font-size: 1.2em;
+    font-size: var(--fnt-sz016);
     box-shadow: 0 2px 10px #777;
     transition: transform .4s;
     cursor:default;

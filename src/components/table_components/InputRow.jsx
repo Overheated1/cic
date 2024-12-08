@@ -11,7 +11,6 @@ import { CustomLabel } from "../custom_components/CustomLabel";
 import { Alert } from "../alert_components/Alert/Alert";
 
 export const InputRow = ({ id,rowNumber,addRow,deleteRow,plotData,handleChange,columns,data,buttons,isActive }) => {
-    console.log(isActive)
     const handleEdit = (e,callback = undefined) => {
         let keysDataRows = Object.keys(data[`row${rowNumber}`])
         let continueProcess = keysDataRows.length >= 4 ? true : false;
@@ -68,7 +67,7 @@ export const InputRow = ({ id,rowNumber,addRow,deleteRow,plotData,handleChange,c
 
     return (
         <>
-        <div className="row table-grid-container" id={id}>
+        <div className="row table-grid-container"  id={id}>
             {columns.map((column) => {
 
                 
@@ -82,7 +81,7 @@ export const InputRow = ({ id,rowNumber,addRow,deleteRow,plotData,handleChange,c
                         buttons ?
                         buttons.map((data) => {
                             if(isActive)
-                                return <div clas key={uuid()} onClick={(e) => (types[data.action] !== undefined ? types[data.action](e,data.callback) : handleCustomCallback(e,data.callback))} className={`update-data-icons ${data.name}`}>
+                                return <div key={uuid()} onClick={(e) => (types[data.action] !== undefined ? types[data.action](e,data.callback) : handleCustomCallback(e,data.callback))} className={`update-data-icons ${data.name}`}>
                                             {data.svgComponent}
                                         </div>
                             return <div key={uuid()} onClick={(e) => (types[data.action] !== undefined ? types[data.action](e,data.callback) : data.callback(e,data.action))} className={`update-data-icons ${data.name}`}>

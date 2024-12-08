@@ -8,7 +8,7 @@
     width: 100%;
     color: var(--principal_color);
     padding: .5em 1em;
-    font-size: .9em;
+    font-size: var(--fnt-sz016);
 }
 
 .custom-select-triangle-icon{
@@ -46,7 +46,7 @@ li.no-results{
 }
 .custom-select-dropdown-content.dropdown-visible{
     display: flex;   
-    font-size: .8em;
+    font-size: var(--fnt-sz016);
     flex-direction: column;
     border: 1px solid rgb(93, 93, 255);
     color: rgb(93, 93, 255);
@@ -75,31 +75,31 @@ li.no-results{
 
 div.search {
     width: 100%;
-    font-size: 1em;
-    
-    border-radius: .7em;
-    border: 1px solid rgb(93, 93, 255);
-    margin-top: .8em;
-    margin-bottom: .8em;
+    font-size: var(--fnt-sz016);
     box-shadow: none;
     text-align: left;
-
+    padding-right: 1vw;
 }
 
 div.search input {
     width: 100%;
     text-align: left;
-    font-size: 1.2em;
-    padding: .7em 1.7em;
+    font-size: var(--fnt-sz012);
 }
+.table-left-part{
+    font-size: var(--fnt-sz016);
+    font-weight: bold;
+    min-height: 3.3vw;
+}
+
 .th-cell{
-    font-size: 1.4em;
+    font-size: var(--fnt-sz016);
     font-weight: bold;
 }
 
 .search-bar{
     width: 90%;
-    font-size: 1em;
+    font-size: var(--fnt-sz016);
     outline: none;
     border: none;
 }

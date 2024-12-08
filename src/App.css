@@ -1,6 +1,18 @@
 *{
   box-sizing: border-box;
+  --principal_color: rgb(93, 93, 255);
+
+  --fnt-sz012: 12px;
+  --fnt-sz014: 14px;
+  --fnt-sz016: 16px;
+  --fnt-sz020: 20px;
+  --fnt-sz024: 24px;
+
+  --wth030: 30vw;
+  --wth050: 50vw;
+
 }
+
 .App {
   text-align: center;
 }

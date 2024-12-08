@@ -282,7 +282,7 @@ const Report = () => {
             <div className="left-alignment short-margin-top container">
                 {methodFetchedData.length === 0 ? <div>No hay datos por el momento</div> : 
                 <div className="report-container">
-                    <Table columns={columns} data={methodFetchedData} />
+                    <Table tableTitle={"Reportes"} columns={columns} data={methodFetchedData} />
                     <div className="report-graph">
                         <ReactApexChart options={state.options} series={state.series} type="area" height={350} />
                     </div>

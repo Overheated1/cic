@@ -479,7 +479,7 @@ const Reproducibility = () => {
                             }
                         </div>
                 </div>
-                <Table columns={columns} data={[]} buttons={buttons}/>
+                <Table tableTitle={"Reproducibilidad"} columns={columns} data={[]} buttons={buttons}/>
             </div>
             {/* {Object.keys(dataPlot).length > 0 && <DemoLine data={dataPlot}/>}             */}
             <div className="report-graph">

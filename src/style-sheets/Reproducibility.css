@@ -38,7 +38,7 @@
     background-color: rgb(69, 98, 131);
     width: 2em;
     height: 2em;
-    font-size: 1.5em;
+    font-size: var(--fnt-sz020);
     color:#fff;
     display: flex;
     border-radius: 50%;

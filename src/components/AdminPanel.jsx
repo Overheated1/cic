@@ -62,12 +62,12 @@ const AdminPanel = () => {
             <div className="container-cards-admin">
                 <div className="grid-2-columns">
                     <div className="card">
-                        <div className="self-align-center flex-container little-margin">
+                        <div className="self-align-center flex-container m01">
                             <span className="important-text">Consultas Exitosas</span>
                             |
                             <span className="gray-text subtitle-card">Hoy</span>
                         </div>
-                        <div className="main-container flex-container little-margin">
+                        <div className="main-container flex-container m01">
                             <div className="success-svg-container">
                                 <SuccessSvg/>
                             </div>
@@ -84,12 +84,12 @@ const AdminPanel = () => {
                     </div>
                     
                     <div className="card">
-                        <div className="self-align-center flex-container little-margin">
+                        <div className="self-align-center flex-container m01">
                             <span className="important-text">Consultas Fallidas</span>
                             |
                             <span className="gray-text subtitle-card">Hoy</span>
                         </div>
-                        <div className="main-container flex-container little-margin">
+                        <div className="main-container flex-container m01">
                             <div className="error-svg-container">
                                 <ErrorSvg/>
                             </div>
@@ -106,12 +106,12 @@ const AdminPanel = () => {
                     </div>
                     
                     <div className="card card-alt">
-                        <div className="self-align-center flex-container little-margin">
+                        <div className=" flex-container m01">
                             <span className="important-text">Usuarios</span>
                             |
                             <span className="gray-text subtitle-card">Año</span>
                         </div>
-                        <div className="main-container flex-container little-margin">
+                        <div className="main-container flex-container m01">
                             <div className="users-svg-container">
                                 <AboutSvg/>
                             </div>
@@ -128,7 +128,7 @@ const AdminPanel = () => {
                     </div>
                     
                     <div className="card card-alt">
-                        <div className="self-align-center flex-container little-margin">
+                        <div className="self-align-center flex-container m01">
                             <span className="important-text">Consultas</span>
                             |
                             <span className="gray-text subtitle-card">Este Año</span>
@@ -140,12 +140,12 @@ const AdminPanel = () => {
                 </div>
                 <div className="flex-container flex-column no-margin no-padding-top">
                     <div className="card">
-                        <div className="self-align-center flex-container little-margin">
+                        <div className="self-align-center flex-container m01">
                             <span className="important-text">Espacio ocupado por la Base de datos</span>
                             |
                             <span className="gray-text subtitle-card">Hoy</span>
                         </div>
-                        <div className="main-container flex-container little-margin">
+                        <div className="main-container flex-container m01">
                             <RingChart data={getRingData()} labels={["Ocupado por la BD","Libre en disco"]} />
                             <div className="text-card disk-usage-container">
                                 <div className="main-text">
@@ -155,12 +155,12 @@ const AdminPanel = () => {
                         </div>
                     </div>
                     <div className="card to-do-list-container">
-                        <div className="self-align-center flex-container little-margin ">
+                        <div className="self-align-center flex-container m01 ">
                             <span className="important-text">Actividades recientes</span>
                             |
                             <span className="gray-text subtitle-card">Hoy</span>
                         </div>
-                        <div className="main-container no-gap full-width flex-container flex-column little-margin">
+                        <div className="main-container max-wdt025 no-gap full-width flex-container flex-column m01">
                             <div className="list-item full-width">
                                 <div className="grid-3-columns">
                                     <div className="time gray-text">2 min</div>

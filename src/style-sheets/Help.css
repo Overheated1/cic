@@ -8,7 +8,7 @@
     background-color: var(--main-color);
     width: 15em;
     padding: 1em;
-    font-size: .8em;
+    font-size: var(--fnt-sz016);
     border-radius: .6em;
     cursor: pointer;
 }
@@ -29,13 +29,13 @@ form.top-alignment{
 .current-container{
     display: flex;
     flex-direction: column;
-    font-size: 1.6em;
+    font-size: var(--fnt-sz020);
     gap: 2em;
 
 }
 .main-title-help{
     font-weight: 600;
-    font-size: 1.3em;
+    font-size: var(--fnt-sz016);
     text-align: left;
 }
 .grid-2-columns-help-item{
