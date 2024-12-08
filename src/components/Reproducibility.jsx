@@ -421,17 +421,17 @@ const Reproducibility = () => {
                 </div>
                 <div className={`ContInpPlaceholder ${formDataErrors.equipment_name ? 'error' : ''}`}>
                     <EquipmentSvg/>
-                    <input onChange={handleFormFieldChange} value={formData.equipment_name} className="medium-width blue-border small-height left-alignment form-input" name="equipment_name" type="text" required/>
+                    <input onChange={handleFormFieldChange} value={formData.equipment_name} className="large-width blue-border small-height left-alignment form-input" name="equipment_name" type="text" required/>
                     <label className="placeholder form-label" htmlFor="equipment">Equipo</label>
                 </div>
                 <div className={`ContInpPlaceholder ${formDataErrors.analytic_method_name ? 'error' : ''}`}>
                     <PatternSvg/>
-                    <input onChange={handleFormFieldChange} value={formData.analytic_method_name} className="medium-width blue-border small-height left-alignment form-input" name="analytic_method_name" type="text" required/>
+                    <input onChange={handleFormFieldChange} value={formData.analytic_method_name} className="large-width blue-border small-height left-alignment form-input" name="analytic_method_name" type="text" required/>
                     <label className="placeholder form-label" htmlFor="analytic_method">Método analítica</label>
                 </div>
                 <div className={`ContInpPlaceholder ${formDataErrors.analytic_technique_name ? 'error' : ''}`}>
                     <MethodSvg/>
-                    <input onChange={handleFormFieldChange} value={formData.analytic_technique_name} className="medium-width blue-border small-height left-alignment form-input" name="analytic_technique_name" type="text" required/>
+                    <input onChange={handleFormFieldChange} value={formData.analytic_technique_name} className="large-width blue-border small-height left-alignment form-input" name="analytic_technique_name" type="text" required/>
                     <label className="placeholder form-label" htmlFor="analytic_technique">Técnica analítico</label>
                 </div>
                 <div className={`ContInpPlaceholder ${formDataErrors.temperature_value ? 'error' : ''}`}>
@@ -451,13 +451,13 @@ const Reproducibility = () => {
                 
                 <div className={`ContInpPlaceholder ${formDataErrors.controller_concentration ? 'error' : ''}`}>
                     <ConcentrationSvg/>
-                    <input onChange={handleFormFieldChange} value={formData.controller_concentration} className="medium-width blue-border small-height left-alignment form-input" name="controller_concentration" type="text" required/>
+                    <input onChange={handleFormFieldChange} value={formData.controller_concentration} className="large-width blue-border small-height left-alignment form-input" name="controller_concentration" type="text" required/>
                     <label className="placeholder form-label" htmlFor="concentration">Concentración controlador</label>
                 </div>
                 {isCommercial &&
                 <div className={`ContInpPlaceholder ${formDataErrors.controller_commercial_brand ? 'error' : ''}`}>
                     <SerumSvg/>
-                    <input onChange={handleFormFieldChange} value={formData.controller_commercial_brand} className="medium-width blue-border small-height left-alignment form-input" name="controller_commercial_brand" type="text" required/>
+                    <input onChange={handleFormFieldChange} value={formData.controller_commercial_brand} className="large-width blue-border small-height left-alignment form-input" name="controller_commercial_brand" type="text" required/>
                     <label className="placeholder form-label" htmlFor="pattern">Marca Comercial</label>
                 </div>
                 }
@@ -468,7 +468,7 @@ const Reproducibility = () => {
                 <input type="button" className="extra-width blue-border small-height" id="submitFormButton" onClick={handleSubmitRepeatabilityData} value="Guardar"/>
                 
             </form>
-            <div className="flex-column">
+            <div className="flex-container left-alignment extra-gap short-margin-top flex-column">
                 <div className="container-steps">
                         <div className="current-date">{new Date().toLocaleDateString("es-MX",{ weekday:'long', day:'numeric', month:'long', year:'numeric' })}</div>
                         <div className="days-steps">

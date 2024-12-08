@@ -407,23 +407,23 @@ const Repeatability = () => {
                 </div>
                 <div className={`ContInpPlaceholder ${formDataErrors.equipment_name ? 'error' : ''}`}>
                     <EquipmentSvg/>
-                    <input onChange={handleFormFieldChange} value={formData.equipment_name} className="medium-width blue-border small-height left-alignment form-input" name="equipment_name" type="text" required/>
+                    <input onChange={handleFormFieldChange} value={formData.equipment_name} className="large-width blue-border small-height left-alignment form-input" name="equipment_name" type="text" required/>
                     <label className="placeholder form-label" htmlFor="equipment">Equipo</label>
                 </div>
                 <div className={`ContInpPlaceholder ${formDataErrors.analytic_method_name ? 'error' : ''}`}>
                     <PatternSvg/>
-                    <input onChange={handleFormFieldChange} value={formData.analytic_method_name} className="medium-width blue-border small-height left-alignment form-input" name="analytic_method_name" type="text" required/>
+                    <input onChange={handleFormFieldChange} value={formData.analytic_method_name} className="large-width blue-border small-height left-alignment form-input" name="analytic_method_name" type="text" required/>
                     <label className="placeholder form-label" htmlFor="analytic_method">Método analítica</label>
                 </div>
                 <div className={`ContInpPlaceholder ${formDataErrors.analytic_technique_name ? 'error' : ''}`}>
                     <MethodSvg/>
-                    <input onChange={handleFormFieldChange} value={formData.analytic_technique_name} className="medium-width blue-border small-height left-alignment form-input" name="analytic_technique_name" type="text" required/>
+                    <input onChange={handleFormFieldChange} value={formData.analytic_technique_name} className="large-width blue-border small-height left-alignment form-input" name="analytic_technique_name" type="text" required/>
                     <label className="placeholder form-label" htmlFor="analytic_technique">Técnica analítico</label>
                 </div>
                 <div className={`ContInpPlaceholder ${formDataErrors.temperature_value ? 'error' : ''}`}>
                     <TemperatureSvg/>
                     <input onChange={handleFormFieldChange} value={formData.temperature_value} className="blue-border left-alignment small-height form-input" name="temperature_value" type="text" required/>
-                    <label className="placeholder form-label" htmlFor="temperature">Temperatura</label>
+                    <label className="placeholder placeholder-alt form-label" htmlFor="temperature">Temperatura</label>
                     <div className="custom-select-wrapper-small">
                         <CustomSelect name="temperature_type_id" selectedValue = {formData.temperature_type_id} onChange={handleFormFieldChange} placeholder={"Tipo"} searchable={true} noResults={"Sin Opciones"} noOPtions={"Sin Opciones"} data={temperatureData} placeholderSearchBar={"Buscar.."}/>
                     </div>
@@ -437,13 +437,13 @@ const Repeatability = () => {
                 
                 <div className={`ContInpPlaceholder ${formDataErrors.controller_concentration ? 'error' : ''}`}>
                     <ConcentrationSvg/>
-                    <input onChange={handleFormFieldChange} value={formData.controller_concentration} className="medium-width blue-border small-height left-alignment form-input" name="controller_concentration" type="text" required/>
+                    <input onChange={handleFormFieldChange} value={formData.controller_concentration} className="large-width blue-border small-height left-alignment form-input" name="controller_concentration" type="text" required/>
                     <label className="placeholder form-label" htmlFor="concentration">Concentración controlador</label>
                 </div>
                 {isCommercial &&
                 <div className={`ContInpPlaceholder ${formDataErrors.controller_commercial_brand ? 'error' : ''}`}>
                     <SerumSvg/>
-                    <input onChange={handleFormFieldChange} value={formData.controller_commercial_brand} className="medium-width blue-border small-height left-alignment form-input" name="controller_commercial_brand" type="text" required/>
+                    <input onChange={handleFormFieldChange} value={formData.controller_commercial_brand} className="large-width blue-border small-height left-alignment form-input" name="controller_commercial_brand" type="text" required/>
                     <label className="placeholder form-label" htmlFor="pattern">Marca Comercial</label>
                 </div>
                 }

@@ -72,11 +72,11 @@ export const InputRow = ({ id,rowNumber,addRow,deleteRow,plotData,handleChange,c
 
                 
                 if(isActive)
-                    return <div  key={uuid()}> <CustomInput value={data[`row${rowNumber}`][column.name]} handleChange={handleChange} identifier={`row${ rowNumber }`} readOnly={column.name === "d1_d2"} name={`${column.name}`}/> </div>  
-                return <div key={uuid()}> <CustomLabel value={data[`row${rowNumber}`][column.name]} identifier={`row${ rowNumber }`} name={`${column.name}`}/> </div>
+                    return <div className="flex-container" key={uuid()}> <CustomInput value={data[`row${rowNumber}`][column.name]} handleChange={handleChange} identifier={`row${ rowNumber }`} readOnly={column.name === "d1_d2"} name={`${column.name}`}/> </div>  
+                return <div className="flex-container" key={uuid()}> <CustomLabel value={data[`row${rowNumber}`][column.name]} identifier={`row${ rowNumber }`} name={`${column.name}`}/> </div>
         })}
             <div className={`row${rowNumber} flex-container self-align-center full-width`}>
-                <div className={`flex-container left-alignment containerRow${rowNumber}`}>
+                <div className={`flex-container no-padding left-alignment containerRow containerRow${rowNumber}`}>
                     {
                         buttons ?
                         buttons.map((data) => {

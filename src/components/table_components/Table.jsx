@@ -7,6 +7,9 @@ import { DownloadCsvSvg } from "../svg_components/DownloadCsvSvg";
 import { PrintSvg } from "../svg_components/PrintSvg";
 import { Alert } from "../alert_components/Alert/Alert.js";
 import { ErrorSvg } from "../svg_components/ErrorSvg.jsx";
+import { CustomSelect } from "../custom_components/custom_select_component/CustomSelect.jsx";
+import { LeftArrowSvg } from "../svg_components/LeftArrowSvg.jsx";
+import { RightArrowSvg } from "../svg_components/RightArrowSvg.jsx";
 
 export const Table = ({columns,buttons,data,tableTitle}) => {
     let optionsPerName = {};
@@ -225,6 +228,9 @@ export const Table = ({columns,buttons,data,tableTitle}) => {
         return result
     }
 
+    const handleRowChange = (e) => {
+        console.log(e);
+    }
 
     useEffect(() => {
         fillData(data);
@@ -281,18 +287,44 @@ export const Table = ({columns,buttons,data,tableTitle}) => {
             <div id="data-container" className="data-container tbody">
                 {dataRowsComponent.length === 0 ?
                     <div  className="no-data-column">
-                        <div className="flex-container no-margin-top">
+                        <div className="flex-container">
                             <p className="no-data-paragraph">No hay datos por el momento</p> <div onClick={addRow} className="update-data-icons add-row">
                                 <AddSvg/>
                             </div>
                         </div>
                     </div> :
-                dataRowsComponent.map((data) => {
-                    return (
-                        data
-                    );
-                })
+                    dataRowsComponent.map((data) => {
+                        return (
+                            data
+                        );
+                    })
                 }
+            </div>
+            <div className = "table-footer">
+                <div className="flex-container extra-gap right-alignment full-width">
+                    <span>Filas por página</span>
+                    <CustomSelect customClassName={"select-alternative"} selectedValue = {8} onChange={handleRowChange} name="row_per_page" placeholder={"1"} noResults={"Sin Opciones"} noOPtions={"Sin Opciones"} data={
+                        Array.from({ length: 9 }, (_, index) => {
+
+                            const number = index + 1;
+                        
+                            return {
+                                value: number,
+                                text: number
+                            };
+                        
+                        })
+                    } placeholderSearchBar={"Buscar.."}/>
+                    <span>1 - 8 de 9</span>
+                    <div className=" flex-container">
+                        <div className="pointer-cursor disabled">
+                            <LeftArrowSvg/>
+                        </div>
+                        <div className="pointer-cursor">
+                            <RightArrowSvg/>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>    
     )
