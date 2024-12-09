@@ -26,7 +26,6 @@ const Users = () => {
         let temp = [...jsonData];
 
         setUserData(temp);
-        console.log(userData)
     }
 
     const handleEdit = async (e,type) => {

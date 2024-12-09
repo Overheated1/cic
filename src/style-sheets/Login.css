@@ -59,7 +59,7 @@ div.no-background-color{
 
 .buttonLogin{
     border:1px solid var(--main-color);    
-    font-size: var(--fnt-sz016);
+    font-size: var(--fnt-sz014);
     margin-top: 1em;
     width: 100%;
     height: 3em;
@@ -89,7 +89,7 @@ div.no-background-color{
 }
 
 input.inputLogin{
-    font-size: var(--fnt-sz016);
+    font-size: var(--fnt-sz014);
     border-radius: .5em;
     height: 2em;
     padding: 1.5em;

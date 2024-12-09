@@ -65,7 +65,7 @@ li.no-results{
     display: flex;
     justify-content: center;
     align-items: center;
-    padding: 1em 0;
+    padding: .7vw 0;
 }
 .custom-select-dropdown-option:hover{
     background-color: var(--principal_color);
