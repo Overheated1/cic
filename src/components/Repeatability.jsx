@@ -11,7 +11,7 @@ import { ConcentrationSvg } from "./svg_components/ConcentrationSvg";
 import { SerumSvg } from "./svg_components/SerumSvg";
 import { ConcentrationSerumSvg } from "./svg_components/ConcentrationSerumSvg";
 import { Table } from "./table_components/Table";
-import { DemoLine } from "./DemoLine";
+import { DemoLine } from "./graphs/DemoLine.jsx";
 import { N } from "./svg_components/NSvg";
 import { D1D2 } from "./svg_components/D1D2Svg";
 import { D1AndD2 } from "./svg_components/D1AndD2Svg";
@@ -23,8 +23,9 @@ import { EditSvg } from "./svg_components/EditSvg.jsx";
 import { AddSvg } from "./svg_components/AddSvg.jsx";
 import { SaveSvg } from "./svg_components/SaveSvg.jsx";
 import { handleResponse } from "../utils/utils.js";
-import AreaLineChart from "./AreLineChart.jsx";
+import AreaLineChart from "./graphs/AreaLineChart.jsx";
 import ReactApexChart from "react-apexcharts";
+import { TableHeaders } from "./TableHeaders.jsx";
 
 
 const Repeatability = () => {
@@ -391,74 +392,13 @@ const Repeatability = () => {
 
     return (
         <section className="TableContainer">
-            <form className="side-form">{/*institucion fecha componente patron equipo metodo concentracion patron temperatura */}
-                <input type="hidden" id="repeatability_id" name="repeatability_id" repeatability_id={-1} header_id={-1}/>
-                <div className={`ContInpPlaceholder ${formDataErrors.determination_id ? 'error' : ''}`}>
-                    <ComponentSvg/>
-                    <div className="custom-select-wrapper">
-                        <CustomSelect customClassName={"capitalize-text"} selectedValue = {formData.determination_id} onChange={handleFormFieldChange} name="determination_id" placeholder={"Determinación"} searchable={true} noResults={"Sin Opciones"} noOPtions={"Sin Opciones"} data={determinationData} placeholderSearchBar={"Buscar.."}/>
-                    </div>
-                </div>
-                <div className={`ContInpPlaceholder ${formDataErrors.institution_id ? 'error' : ''}`}>
-                    <InstitutionSvg/>
-                    <div className="custom-select-wrapper">
-                        <CustomSelect onChange={handleFormFieldChange} selectedValue = {formData.institution_id} name="institution_id" placeholder={"Institución"} searchable={true} noResults={"Sin Opciones"} noOPtions={"Sin Opciones"} data={institutionsData} placeholderSearchBar={"Buscar.."}/>
-                    </div>
-                </div>
-                <div className={`ContInpPlaceholder ${formDataErrors.equipment_name ? 'error' : ''}`}>
-                    <EquipmentSvg/>
-                    <input onChange={handleFormFieldChange} value={formData.equipment_name} className="large-width blue-border small-height left-alignment form-input" name="equipment_name" type="text" required/>
-                    <label className="placeholder form-label" htmlFor="equipment">Equipo</label>
-                </div>
-                <div className={`ContInpPlaceholder ${formDataErrors.analytic_method_name ? 'error' : ''}`}>
-                    <PatternSvg/>
-                    <input onChange={handleFormFieldChange} value={formData.analytic_method_name} className="large-width blue-border small-height left-alignment form-input" name="analytic_method_name" type="text" required/>
-                    <label className="placeholder form-label" htmlFor="analytic_method">Método analítica</label>
-                </div>
-                <div className={`ContInpPlaceholder ${formDataErrors.analytic_technique_name ? 'error' : ''}`}>
-                    <MethodSvg/>
-                    <input onChange={handleFormFieldChange} value={formData.analytic_technique_name} className="large-width blue-border small-height left-alignment form-input" name="analytic_technique_name" type="text" required/>
-                    <label className="placeholder form-label" htmlFor="analytic_technique">Técnica analítico</label>
-                </div>
-                <div className={`ContInpPlaceholder ${formDataErrors.temperature_value ? 'error' : ''}`}>
-                    <TemperatureSvg/>
-                    <input onChange={handleFormFieldChange} value={formData.temperature_value} className="blue-border left-alignment small-height form-input" name="temperature_value" type="text" required/>
-                    <label className="placeholder placeholder-alt form-label" htmlFor="temperature">Temperatura</label>
-                    <div className="custom-select-wrapper-small">
-                        <CustomSelect name="temperature_type_id" selectedValue = {formData.temperature_type_id} onChange={handleFormFieldChange} placeholder={"Tipo"} searchable={true} noResults={"Sin Opciones"} noOPtions={"Sin Opciones"} data={temperatureData} placeholderSearchBar={"Buscar.."}/>
-                    </div>
-                </div>
-                <div className={`ContInpPlaceholder ${formDataErrors.controller_id ? 'error' : ''}`}>
-                    <ConcentrationSerumSvg/>
-                    <div className="custom-select-wrapper">
-                        <CustomSelect name="controller_id" selectedValue = {formData.controller_id} onChange={handleChangeController} placeholder={"Controlador"} searchable={true} noResults={"Sin Opciones"} noOPtions={"Sin Opciones"} data={controllersData} placeholderSearchBar={"Buscar.."}/>
-                    </div>
-                </div>
-                
-                <div className={`ContInpPlaceholder ${formDataErrors.controller_concentration ? 'error' : ''}`}>
-                    <ConcentrationSvg/>
-                    <input onChange={handleFormFieldChange} value={formData.controller_concentration} className="large-width blue-border small-height left-alignment form-input" name="controller_concentration" type="text" required/>
-                    <label className="placeholder form-label" htmlFor="concentration">Concentración controlador</label>
-                </div>
-                {isCommercial &&
-                <div className={`ContInpPlaceholder ${formDataErrors.controller_commercial_brand ? 'error' : ''}`}>
-                    <SerumSvg/>
-                    <input onChange={handleFormFieldChange} value={formData.controller_commercial_brand} className="large-width blue-border small-height left-alignment form-input" name="controller_commercial_brand" type="text" required/>
-                    <label className="placeholder form-label" htmlFor="pattern">Marca Comercial</label>
-                </div>
-                }
-                <div className="ContInpCheckbox">
-                    <input className="blue-border left-alignment" id="commercial_check" name="commercial_check" checked={isCommercial} onChange={handleCommercialStatus} type="checkbox"/>
-                    <label className="placeholder" htmlFor="commercial_check">Es un suero comercial</label>
-                </div>
-                <input type="button" className="extra-width blue-border small-height" id="submitFormButton" onClick={handleSubmitRepeatabilityData} value="Guardar"/>
-                
-            </form>
+            <TableHeaders getRepeatabilityData={ getRepeatabilityData } fragmentsDataRepeatability={ fragmentsDataRepeatability } />
             <div className="left-alignment short-margin-top container">
                 <div className="short-margin-left current-date">{new Date().toLocaleDateString("es-MX",{ weekday:'long', day:'numeric', month:'long', year:'numeric' })}</div>
                 <Table tableTitle={"Repetibilidad"} columns={columns} data={dataRows} buttons={buttons} />
             </div>
-            <div className="report-graph">
+            
+            <div className={`${state.series?.data?.length ? 'visible' : ''} report-graph`}>
                 <ReactApexChart options={state.options} series={state.series} type="area" height={350} />
             </div>
             {/* {Object.keys(dataPlot).length > 0 && <DemoLine data={dataPlot}/>}             */}

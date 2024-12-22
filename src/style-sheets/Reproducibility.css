@@ -40,5 +40,5 @@
     align-items: center;
 }
 .current-day{
-    background-color: rgb(93, 93, 255);
+    background-color: var(--principal_color);
 }

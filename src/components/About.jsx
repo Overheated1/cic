@@ -15,7 +15,7 @@ const About = () => {
     <div className="about-container">
         <h1 className='title'>CIC: CONTROL INTERNO DE CALIDAD</h1>
         <div className="grid-two-columns">
-            <div>
+            <div className='left-alignment left-blue-border'>
                 <h2 className="large-extra-font-size">Introducción</h2>
                 <p className="left-alignment extra-font-size">
                     El Sistema de Control Interno de Calidad (CIC) es una herramienta
@@ -33,34 +33,34 @@ const About = () => {
         <div className='full-width'>    
             <h2 className="large-extra-font-size">Beneficios del proyecto</h2>
             <div className="flex-container container-cards spaced-components">
-                <div className="card">
-                    <div className="flex-container column-flex extra-gap">
+                <div className="card top-column-alignment">
+                    <div className="flex-container column-flex extra-gap large-margin-top">
                         <AboutCard1Svg/>
                         <p>Mejora la precisión y confiabilidad de los resultados de laboratorio.</p>
                     </div>
                 </div>
-                <div className="card">
-                    <div className="flex-container column-flex extra-gap">
+                <div className="card top-column-alignment">
+                    <div className="flex-container column-flex extra-gap large-margin-top">
                         <AboutCard2Svg/>
                         <p>Módulos para la gestión de datos de control de calidad.</p>
                     </div>
                 </div>
-                <div className="card">
-                    <div className="flex-container column-flex extra-gap">
+                <div className="card top-column-alignment">
+                    <div className="flex-container column-flex extra-gap large-margin-top">
                         <AboutCard3Svg/>
                         <p>Cálculo automático de indicadores de calidad.</p>
                     </div>
                 </div>
-                <div className="card">
-                    <div className="flex-container column-flex extra-gap">
+                <div className="card top-column-alignment">
+                    <div className="flex-container column-flex extra-gap large-margin-top">
                         <AboutCard4Svg/>
                         <p>Generación de gráficas de control de calidad.</p>
                     </div>
                 </div>
         </div>
         </div>
-        <div>
-            <h2 className="large-extra-font-size">Necesidad del proyecto</h2>
+        <div className='left-alignment left-blue-border'>
+            <h2 className="large-extra-font-size ">Necesidad del proyecto</h2>
             <p className="left-alignment extra-font-size">
                 El control de calidad interno es un aspecto fundamental para garantizar la
                 confiabilidad de los resultados de laboratorio. Sin embargo, este proceso
@@ -74,20 +74,20 @@ const About = () => {
         <div className='full-width'>    
             <h2 className="large-extra-font-size">Características del sistema</h2>
             <div className="flex-container container-cards spaced-components">
-                <div className="card">
-                    <div className="flex-container column-flex extra-gap">
+                <div className="card top-column-alignment">
+                    <div className="flex-container column-flex extra-gap large-margin-top">
                         <AboutCard6Svg/>
                         <p>Facilitar la recolección y análisis de datos mediante Base de datos para el almacenamiento de datos de control de calidad.</p>
                     </div>
                 </div>
-                <div className="card">
-                    <div className="flex-container column-flex extra-gap">
+                <div className="card top-column-alignment">
+                    <div className="flex-container column-flex extra-gap large-margin-top">
                         <AboutCard7Svg/>
                         <p>Posibilidad de generar informes personalizados.</p>
                     </div>
                 </div>
-                <div className="card">
-                    <div className="flex-container column-flex extra-gap">
+                <div className="card top-column-alignment">
+                    <div className="flex-container column-flex extra-gap large-margin-top">
                         <AboutCard5Svg/>
                         <p>Sistema de alertas para posibles problemas de calidad.</p>
                     </div>
@@ -109,7 +109,7 @@ const About = () => {
                     </ul>
             </div>
         </div>
-        <div>
+        <div className='left-alignment left-blue-border'>
             <h2 className="large-extra-font-size">Impacto del proyecto</h2>
             <p className="left-alignment extra-font-size">
                 El CIC tiene el potencial de mejorar significativamente la calidad de la

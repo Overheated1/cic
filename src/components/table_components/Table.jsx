@@ -1,37 +1,26 @@
 import { InputRow } from "./InputRow";
 import { v4 as uuid } from "uuid";
 import { useEffect, useState} from "react";
-import { SearchSvg } from "../svg_components/SearchSvg";
 import { AddSvg } from "../svg_components/AddSvg";
-import { DownloadCsvSvg } from "../svg_components/DownloadCsvSvg";
-import { PrintSvg } from "../svg_components/PrintSvg";
 import { Alert } from "../alert_components/Alert/Alert.js";
-import { ErrorSvg } from "../svg_components/ErrorSvg.jsx";
 import { CustomSelect } from "../custom_components/custom_select_component/CustomSelect.jsx";
 import { LeftArrowSvg } from "../svg_components/LeftArrowSvg.jsx";
 import { RightArrowSvg } from "../svg_components/RightArrowSvg.jsx";
-import { CustomCheckbox } from "../custom_components/CustomCheckbox.jsx";
-import { TrashSvg } from "../svg_components/TrashSvg.jsx";
+import { TableHeader } from "./TableHeader.jsx";
 
 export const Table = ({columns,buttons,data,tableTitle}) => {
+    var table_id = uuid(); 
     let optionsPerName = {};
     let columnHeaders = [];
     let columnHeadersWithoutCalculable = [];
     let calculable = {};
     var dataRowsTemp = {};
-    var checkedCountTemp = 0;
-    let actualRow = "";
-    const [dataRowsComponent,setDataRowsComponent] = useState([]);
     const [dataRows,setDataRows] = useState({});
     const [deleteOptionsObject,setDeleteOptionsObject] = useState({});
-    const [dataRowsComponentToMap,setDataRowsComponentToMap] = useState([]);
-    const [isVisibleSearching,setIsVisibleSearching] = useState(false);
-    const [isMasterCheckChecked, setIsMasterCheckChecked] = useState(false);
+    const [dataRowsToMap,setDataRowsToMap] = useState({});
     const [rowsPerPage,setRowsPerPage] = useState(8);
-    const [checkedCount,setCheckedCount] = useState(0);
     const [actualPageNumber,setActualPageNumber] = useState(1);
-
-    var rowNumberActive = 0;
+    var activeRowNumber = -1;
 
 
     // INITIALIZING SETUPS
@@ -69,31 +58,7 @@ export const Table = ({columns,buttons,data,tableTitle}) => {
         }
     }
 
-    
-    const handleCheckAll = (e) => {
-        let checkboxesList = document.querySelectorAll(".custom-normal-checkbox");
 
-        for(let i = 0;i < checkboxesList.length;i++){
-            checkboxesList[i].checked = e.target.checked;
-        }
-
-        if(e.target.checked){
-            checkedCountTemp = checkboxesList.length;
-            setCheckedCount(checkboxesList.length);    
-        }else{
-            checkedCountTemp = 0;
-            setCheckedCount(0);
-        }
-        setIsMasterCheckChecked(e.target.checked);
-    }
-
-    const handleCheckbox = (action,checkbox_id,e = undefined,id = undefined) => {
-        if(e.target.checked) checkedCountTemp++;
-        else checkedCountTemp--;
-
-        setCheckedCount(checkedCountTemp)
-    }
-    
     const handleDelete = (e) => {
         if(deleteOptionsObject?.callback) deleteOptionsObject?.callback(e,"pre-delete");
 
@@ -106,7 +71,7 @@ export const Table = ({columns,buttons,data,tableTitle}) => {
     }
 
     const deleteRow = (e) => {
-        dataRowsTemp = dataRows;
+        Object.assign(dataRowsTemp,dataRows);
         let checkboxesList = document.querySelectorAll(".custom-normal-checkbox");
         let rowsIdentifiersToDelete = [];
 
@@ -118,7 +83,6 @@ export const Table = ({columns,buttons,data,tableTitle}) => {
         }
 
         for(let i = 0;i < rowsIdentifiersToDelete.length;i++){
-            let rowKey = rowsIdentifiersToDelete[i].parentNode.rowId;
             let classArray = rowsIdentifiersToDelete[i].classList;
 
             let index = undefined;
@@ -127,14 +91,7 @@ export const Table = ({columns,buttons,data,tableTitle}) => {
                     index = classArray[i].split("custom-checkbox")[1];
             }
 
-            let prevIndex = index - 1;
             
-            setDataRowsComponent(prevDataRowsComponent => [
-                ...prevDataRowsComponent.filter((data) => {
-                    return data.key !== rowKey
-                }),
-            ]);
-
             let deletedRow = dataRowsTemp[`row${index}`];
             delete dataRowsTemp[`row${index}`];
 
@@ -149,47 +106,22 @@ export const Table = ({columns,buttons,data,tableTitle}) => {
         }
     }
     
-    const search = (e) => {
-        let tbody = document.getElementById("data-container");
-        let tr = tbody.querySelectorAll("tr");
-        if(e.target.value === ''){
-            for(let i =0;i<tr.length;i++){
-                tr[i].style.display = "table-row";
-            }
-        }else{
-            let continueLooping = false;
-            for(let i =0;i<tr.length;i++){
-                let children = tr[i].querySelectorAll("input")
-                for(let x =0;x<children.length;x++){
-                    continueLooping = false;
-                    if(children[x].value === e.target.value){
-                        continueLooping = true;
-                        tr[i].style.display = "table-row";
-                        break
-                    }
-                }
-                if(!continueLooping) tr[i].style.display = "none";
-            } 
-        }
-    }
     
     const addRow = (e) => {
         e.stopPropagation()
         e.preventDefault()
-        dataRowsTemp = dataRows;
+        Object.assign(dataRowsTemp,dataRows);
         
         let rowNumber = Object.keys(dataRowsTemp).length;
         let prevRowNumber = rowNumber - 1;
-        actualRow = `row${rowNumber}`;
         let insert = true;
-        let id = uuid(); 
         let container = e.target.parentNode;
         let tr = container.parentNode.parentNode
         let tdToValidate = tr.children;
 
         if(prevRowNumber !== -1){
             prevRowNumber = `row${prevRowNumber}`;
-            // -1 because the buttons in the table is the last column
+            // -1 because is the last buttons column in the table
             for(let i = 0;i < (tdToValidate.length - 1);i++){
                 if(tdToValidate[i].firstElementChild.value === ""){
                     insert = false;
@@ -212,40 +144,34 @@ export const Table = ({columns,buttons,data,tableTitle}) => {
         }
         
         if(insert){
-            rowNumberActive  = rowNumber;
-
-            setDataRowsComponent(prevDataRowsComponent => {
-                return [...prevDataRowsComponent,<InputRow  handleCheckbox={handleCheckbox} buttons={buttons} key={id} id={id} data={dataRowsTemp} columns={columns} isActive={rowNumber == rowNumberActive} rowNumber={rowNumber} handleChange={handleChange} addRow={addRow}/>
-                ]
-            });
+            activeRowNumber = rowNumber;
             setDataRows(dataRowsTemp);
+
         }
-        return prevRowNumber === -1 ? dataRowsTemp[rowNumber] : dataRowsTemp[prevRowNumber];
+
+        return { row : prevRowNumber === -1 ? dataRowsTemp[rowNumber] : dataRowsTemp[prevRowNumber],rowNumber : rowNumber };
     }  
 
 
     const fillData = async (data) =>  {
-        let tempObjectRows = [];
-        let id = undefined;
         let rowNumber = undefined;
         dataRowsTemp = {};
         
         for(let i=0;i < data.length;i++){
-            id = uuid(); 
             rowNumber = i
             dataRowsTemp[`row${rowNumber}`] = data[i];
-            
-            tempObjectRows.push(<InputRow  handleCheckbox={handleCheckbox} buttons={buttons} key={id} id={id} data={dataRowsTemp} columns={columns} rowNumber={rowNumber} handleChange={handleChange} addRow={addRow}/>)
         }
-        setDataRowsComponent(tempObjectRows);
+
         setDataRows(dataRowsTemp);
     }
+
     const handleChange = (e) => {
         let classList = e.target.classList;
         let rowNumber = classList[classList.length - 1];
         let calculableArray = Object.keys(calculable);
 
-        dataRowsTemp = dataRows;
+        Object.assign(dataRowsTemp,dataRows);
+
         dataRowsTemp[rowNumber][e.target.name] = e.target.value;
 
         for(let i = 0;i < calculableArray.length;i++){
@@ -276,7 +202,7 @@ export const Table = ({columns,buttons,data,tableTitle}) => {
             }
         }
 
-        setDataRows(dataRowsTemp)
+        // setDataRows(dataRowsTemp)
     }
 
     const calculateFields = (neededNumbers,operation) => {
@@ -308,9 +234,10 @@ export const Table = ({columns,buttons,data,tableTitle}) => {
 
     const handleNextData = (e) => {
         let tempPageNumber = actualPageNumber;
-        let isRightDisabled = tempPageNumber >= (Math.ceil(dataRowsComponent.length / rowsPerPage));
+        let dataRowLength = Object.keys(dataRows).length;
+        let isRightDisabled = tempPageNumber >= (Math.ceil(dataRowLength / rowsPerPage));
         
-        if(actualPageNumber < (Math.ceil(dataRowsComponent.length / rowsPerPage)) && !isRightDisabled){
+        if(actualPageNumber < (Math.ceil(dataRowLength / rowsPerPage)) && !isRightDisabled){
             setActualPageNumber(actualPageNumber + 1)
             tempPageNumber++;
         }
@@ -328,20 +255,18 @@ export const Table = ({columns,buttons,data,tableTitle}) => {
     } 
 
     const getPageRowCount = () => {
-        return rowsPerPage >= dataRowsComponent.length ? dataRowsComponent.length : rowsPerPage;
+        let dataRowLength = Object.keys(dataRows).length;
+        return rowsPerPage >= dataRowLength ? dataRowLength : rowsPerPage;
     }
 
 
     const getPagesNumber = (rowsPerPageVal = undefined) => {
-        return Math.ceil(dataRowsComponent.length / (rowsPerPageVal ?? rowsPerPage));
+        let dataRowLength = Object.keys(dataRows).length;
+        return Math.ceil(dataRowLength / (rowsPerPageVal ?? rowsPerPage));
     }
-
-    useEffect(() => {
-        fillData(data);
-    },[data]);
-
-    useEffect(() => {
-        let temp = [];
+    
+    const setActualRows = () => {
+        let temp = {};
         let rowCount = getPageRowCount();
         
         //the total elements might not be the real total elements because you could have 7 elements with 3 rows per page and 3 pages, 
@@ -350,16 +275,33 @@ export const Table = ({columns,buttons,data,tableTitle}) => {
         //the last page
         let totalElements = rowCount * actualPageNumber;
         let startIndex = (totalElements - (rowCount - 1) - 1);
+        let dataRowsArray = Object.keys(dataRows);
+        
+        if(dataRowsArray.length){
 
-        for(let i = 0;i < rowsPerPage;i++){
-            temp.push(dataRowsComponent[startIndex + i]);
+            for(let i = 0;i < getPageRowCount();i++){
+                let row = dataRowsArray[startIndex + i];
+                let data = dataRows[row];
+                
+                if(!row) break;
+                
+                temp[row] = data;
+            }
         }
 
-        setDataRowsComponentToMap(temp);
-        
-    },[dataRowsComponent,rowsPerPage,actualPageNumber]);
+        console.log("temp",temp,dataRowsToMap)
+        setDataRowsToMap(temp);
+    }
 
-    
+    useEffect(() => {
+        fillData(data);
+    },[data]);
+
+    useEffect(() => {
+        setActualRows();
+    },[dataRows,rowsPerPage,actualPageNumber]);
+
+
     useEffect(() => {
         let deleteIndex = undefined;
         buttons.forEach((d,i) => {
@@ -374,84 +316,36 @@ export const Table = ({columns,buttons,data,tableTitle}) => {
     },[buttons])
 
     return (
-        <div id="custom-table">
-            <div className = "thead flex-container flex-column left-alignment full-width no-padding">
-                <div className="left-alignment full-width flex-container flex-column no-padding">
-                    <div className={`actions-container full-width extra-gap no-margin ${checkedCount > 0 ? "deleting-header" : ""}`}>
-                        {
-                            checkedCount === 0 ? 
-                            <>
-                                <div className="table-left-part flex-container left-alignment full-width">
-                                    { 
-                                        isVisibleSearching ?
-                                            <div className="flex-container bottom-alignment no-padding search">
-                                                <SearchSvg/>
-                                                <input id="search" onInput={search}  placeholder="Buscar..."/>
-                                                <div className="close-handler-container" onClick={(e) => setIsVisibleSearching(false)}>
-                                                    <ErrorSvg/>
-                                                </div>
-                                            </div>
-                                            :
-                                            <span>{tableTitle}</span>
-                                    }
-                                </div>
-                                
-                                <div className="flex-container right-alignment extra-gap action-icons-container">
-                                    <div className="parent-svg" onClick={(e) => setIsVisibleSearching(!isVisibleSearching)}>
-                                        <SearchSvg/>
-                                    </div>
-                                    <div className="parent-svg">
-                                        <DownloadCsvSvg/>
-                                    </div>
-                                    <div className="parent-svg">
-                                        <PrintSvg/>
-                                    </div>
-                                </div>
-                            </>   
-                            :
-                            <>
-                                <div className="flex-container selected-rows-text">{ checkedCount } fila(s) seleccionada(s)</div>
-                                <div className="flex-container container-trash">
-                                    <div className="parent-svg" onClick={handleDelete}>
-                                        {deleteOptionsObject?.svgComponent ?? <TrashSvg/>}
-                                    </div>
-                                </div>
-                            </>                            
-                                
-                        }
-                    </div>
-                </div>
-                <div className="table-grid-container">
-                <div className="flex-container header-checkbox-container" key={uuid()}> 
-                    <CustomCheckbox checked={isMasterCheckChecked} handleCheckbox={handleCheckAll} isMasterCheck={true} identifier={`header-checkbox`} name={`custom-checkbox`}/>
-                </div> 
+    <div id='custom-table'>
+                <TableHeader setActualRows={setActualRows} dataRowsToMap={ dataRowsToMap } setDataRowsToMap={ setDataRowsToMap } dataRows={dataRows} table_id={table_id} columnHeaders={columnHeaders} tableTitle={tableTitle} handleDelete={handleDelete} deleteOptionsObject={deleteOptionsObject}/>                
+            <div id="data-container" className="data-container tbody">
                 {
-                        columnHeaders.map((columnType,index) => {
-                            return (
-                                <div key={uuid()} className="flex-container th-cell full-width no-margin no-padding">
-                                    {columnType['svgComponent']} {columnType['label']}
+                    Object.keys(dataRowsToMap).length === 0 ?
+                        <div  className="no-data-column">
+                            <div className="flex-container">
+                                <p className="no-data-paragraph">No hay datos por el momento</p> <div onClick={addRow} className="update-data-icons add-row">
+                                    <AddSvg/>
                                 </div>
+                            </div>
+                        </div> 
+                        :
+                        Object.keys(dataRowsToMap).map((row,index) => {
+                            let data = dataRowsToMap[row];
+                            let id = uuid();
+
+                            let dataValues = Object.values(data)
+                            let isANewRow = false;
+
+                            for(let i = 0;i < dataValues.length;i++){
+                                if(dataValues[i] == ""){
+                                    isANewRow = true; 
+                                    break;
+                                }
+                            }
+                            return (
+                                <InputRow table_id={table_id}  isANewRow={isANewRow} buttons={buttons} key={id} id={id} data={data} columns={columns} activeRowNumber={activeRowNumber} rowNumber={index} handleChange={handleChange} addRow={addRow}/>
                             );
                         })
-                    }
-                    
-                </div>
-                
-            </div>
-            <div id="data-container" className="data-container tbody">
-                {dataRowsComponent.length === 0 ?
-                    <div  className="no-data-column">
-                        <div className="flex-container">
-                            <p className="no-data-paragraph">No hay datos por el momento</p> <div onClick={addRow} className="update-data-icons add-row">
-                                <AddSvg/>
-                            </div>
-                        </div>
-                    </div> :
-                    dataRowsComponentToMap.map((data) => {
-                        return (
-                            data
-                        );
-                    })
                 }
             </div>
             <div className = "table-footer">
@@ -474,7 +368,7 @@ export const Table = ({columns,buttons,data,tableTitle}) => {
                         <div className={`pointer-cursor ${actualPageNumber <= 1 ? "disabled" : ""}`} onClick={handlePrevData}>
                             <LeftArrowSvg/>
                         </div>
-                        <div className={`pointer-cursor ${actualPageNumber >= (Math.ceil(dataRowsComponent.length / rowsPerPage)) ? "disabled" : ""}`} onClick={handleNextData}>
+                        <div className={`pointer-cursor ${actualPageNumber >= (Math.ceil(Object.keys(dataRows).length / rowsPerPage)) ? "disabled" : ""}`} onClick={handleNextData}>
                             <RightArrowSvg/>
                         </div>
                     </div>

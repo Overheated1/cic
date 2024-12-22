@@ -58,7 +58,7 @@ div.no-background-color{
 }
 
 .buttonLogin{
-    border:1px solid var(--main-color);    
+    border:1px solid var(--principal_color);    
     font-size: var(--fnt-sz014);
     margin-top: 1em;
     width: 100%;
@@ -77,7 +77,7 @@ div.no-background-color{
     color: rgba(129, 2, 255, 0.777);
 }
 .buttonLogin:hover{
-    background-color: var(--main-color);
+    background-color: var(--principal_color);
     color: rgb(255, 255, 255);
 }
 .LoginP{
@@ -103,7 +103,7 @@ div.ContInpPlaceholderLog
 {
     width: 100%;
     box-shadow: 0 2px 4px rgb(201, 201, 201);
-    background-color: var(--main-color);
+    background-color: var(--principal_color);
     border-radius: .5em;
     padding-right: .7em;
     justify-content: flex-start;

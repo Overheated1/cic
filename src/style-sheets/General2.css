@@ -11,6 +11,7 @@
     display: flex;
     align-items: flex-start;
     justify-content: center;
+    gap: 1vw;
 }
 
 /* small  margin */
@@ -18,14 +19,14 @@
     margin: 1em;
 }
 .admin-panel{
-    margin: 3%;
+    margin: 5% 3%;
 }
 /* .card svg{
     fi
 } */
- .card-alt{
+ /* .card-alt{
     grid-column: 1/3;
- }
+ } */
  .flex-column{
     flex-direction: column;
  }
@@ -38,6 +39,7 @@
  .card.to-do-list-container{
     align-items: center;
     justify-content: flex-start;
+    width: 100%;
  }
 .main-text{
     color: #000;
@@ -75,13 +77,13 @@
     border-radius: 50%;
 }
 .red-classification{
-    background-color: #f00;
+    background-color: rgb(255, 88, 88);
 }
 .green-classification{
-    background-color: #0f0;
+    background-color: rgb(111, 247, 165);
 }
 .blue-classification{
-    background-color: #00f;
+    background-color: rgb(145, 145, 255);
 }
 
 .disk-usage-container{
@@ -97,17 +99,17 @@
     justify-content: center;
     align-items: center;
 }
-.success-svg-container #success-svg{
+.success-svg-container .success-svg{
     height: 5em;
     width: 5em;
     fill: rgb(0, 255, 68);
 }
-.error-svg-container #error-svg{
+.error-svg-container .error-svg{
     height: 5em;
     width: 5em;
     fill: rgb(255, 17, 0);
 }
-.users-svg-container #about-svg{
+.users-svg-container .about-svg{
     height: 5em;
     width: 5em;
     fill: rgb(255, 140, 0);
@@ -186,12 +188,10 @@
     padding: 1vw;
 }
 
-.card-alt-wth{
-    width: var(--wth030);
-}
 
 .report-graph{
     width: 85%;
+    display: none;
 }
 
 /* max width 25 */

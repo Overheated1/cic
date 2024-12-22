@@ -1,3 +1,38 @@
+
+.section-container{
+    margin-top: 4%;
+    margin-bottom: 5%;
+}
+.contact-form-button{
+    font-size: var(--fnt-sz016);
+}
+.contact-text{
+    font-size: var(--fnt-sz020);
+}
+.search-bar-main-body .search-bar{
+    margin: 0;
+}
+.main-content-help{
+    margin-top: 3vw;
+}
+.content-questions{
+    margin-top: 3vw;
+    display: flex;
+    flex-direction: column;
+    gap: 1vw;
+    width: 100%;
+}
+div.container-contact-form{
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* TO CHECK | 
+            V
+*/
+
 .help-container{
     display: grid;
     grid-template-columns: 20% 77%;
@@ -5,7 +40,7 @@
 }
 .help-step{
     color: #fff;
-    background-color: var(--main-color);
+    background-color: var(--principal_color);
     width: 15em;
     padding: 1em;
     font-size: var(--fnt-sz016);
@@ -28,8 +63,9 @@ form.top-alignment{
 }
 .current-container{
     display: flex;
-    flex-direction: column;
-    font-size: var(--fnt-sz020);
+    flex-direction: column;  
+    max-width: 65%;
+    font-size: var(--fnt-sz018);
     gap: 2em;
 
 }
@@ -40,7 +76,7 @@ form.top-alignment{
 }
 .grid-2-columns-help-item{
     display: grid;
-    grid-template-columns: 2% 98%;
+    grid-template-columns: 4% 96%;
     justify-content: flex-start;
     align-items: flex-start;
 }

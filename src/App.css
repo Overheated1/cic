@@ -1,6 +1,7 @@
 *{
   box-sizing: border-box;
-  --principal_color: rgb(93, 93, 255);
+  --principal_color: rgb(59, 59, 175);;
+  /* rgb(59, 59, 175);rgb(93, 93, 255) */
 
   --fnt-sz012: 12px;
   --fnt-sz014: 14px;

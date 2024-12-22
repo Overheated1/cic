@@ -4,7 +4,7 @@ import principal from "../resources/principal.png"
 const Home = ({ navigate }) => {
     
     return(
-        <div className="flex-column center-flex">
+        <div className="flex-container huge-percent-margin-top flex-column center-flex">
             <div className="flex-container extra-gap">
                 <h1 className="title">
                     CIC en busca de un mejor control de calidad

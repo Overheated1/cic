@@ -3,10 +3,10 @@
     box-shadow: 0 2px 3px #77777733;
     border: 1px solid #d3d3d3;
     border-radius: .7em;
-    width: max-content;
+    width: 85%;
     /* margin: 5% auto 5% 0; */
 }
-.close-handler-container #error-svg{
+.close-handler-container .error-svg{
     height: 1.1vw;
 }
 
@@ -18,7 +18,7 @@
     cursor: pointer;
 }
 
-.close-handler-container:hover #error-svg{
+.close-handler-container:hover .error-svg{
     fill: rgb(255, 0, 0);
 }
 
@@ -48,22 +48,18 @@
     padding-top: 3vw;
 }
 
-:root{
-    --main-color:#8194f2;
-}
 .current-date{
     font-size: var(--fnt-sz016);
-    font-weight: 700;
+    font-weight:lighter;
 }
 .TableContainer{
     width: 100%;
     display: grid;
+    margin-top: 3vw;
     grid-template-columns: 20% 77%;
-    grid-template-rows: max-content calc(100%,max-content);
     gap: 3em;
     justify-content: center;
     align-items: flex-start;
-    height: 92%;
 }
 input{
     padding: .7em 1.5em;
@@ -79,7 +75,7 @@ td input{
     cursor: pointer;
 }
 .parent-svg:hover svg{
-    fill: rgb(93, 93, 255);
+    fill: var(--principal_color);
 }
 div.no-margin-top{
     margin-top: 0;
@@ -87,20 +83,22 @@ div.no-margin-top{
 .no-margin{
     margin: 0;
 }
-#trash-svg,#success-svg,#error-svg,#about-card7-svg,#about-card6-svg,#about-card5-svg,#about-card4-svg,#about-card3-svg,#about-card2-svg,#about-card1-svg,#print-svg,#download-csv-svg,#password-svg,#user-svg{
-    width: 1.5vw;
+.about-card1-svg,.about-card7-svg,.about-card6-svg,.about-card5-svg,.about-card4-svg,.about-card3-svg,.about-card2-svg{
+    height: 2vw;
+}
+.trash-svg,.success-svg,.error-svg,.print-svg,.download-csv-svg,.password-svg,.user-svg{
     height: 1.5vw;
 }
-#concentration-serum-svg,#serum-svg,#help-svg,#n-svg,#quality-control-svg,#d1d2-svg,#d1-and-d2-avg,#date-svg,#search-svg,#component-svg,#pattern-svg,#method-svg,#institution-svg,#equipment-svg,#concentration-svg,#temperature-svg{
+.exit-arrow-svg,.concentration-serum-svg,.serum-svg,.help-svg,.n-svg,.quality-control-svg,.d1d2-svg,.d1-and-d2-svg,.date-svg,.search-svg,.component-svg,.pattern-svg,.method-svg,.institution-svg,.equipment-svg,.concentration-svg,.temperature-svg{
     width: 1.2vw;
     height: 1.2vw;
 }
-#left-arrow-svg,#right-arrow-svg{
+.left-arrow-svg,.right-arrow-svg{
     width: 1vw;
     height: 1vw;
 }
 
-#about-svg{
+.about-svg{
     width: 2em;
     height: 2em;
 }
@@ -112,28 +110,34 @@ div.column-flex{
 .cls-1 {
     fill: none;
 }
-#password-svg,#user-svg{
+.ContInpPlaceholder .password-svg,.ContInpPlaceholder .user-svg{
     fill:#fff;
 }
 form.extra-gap,div.extra-gap{
     gap: 2vw;
 }
 .users-section{
-    margin: 3%;
+    margin: 5% 3%;
     display: grid;
-    grid-template-columns: 35% 65%;
+    grid-template-columns: 40% 60%;
     gap: 1em;
     justify-content: center;
     align-items: flex-start;
 }
-
+/* to check */
 .table-grid-container{
-    display: flex;
-    justify-content: center;
-    align-items: center;
+    display: grid;
+    width: 100%;
+    grid-template-columns: 6% repeat(auto-fit, minmax(100px, 1fr));
+    gap: 10px;
 }
+
 .table-grid-container div{
     width: 10vw;
+}
+
+div.top-column-alignment{
+    justify-content: flex-start;
 }
 
 /* tbody{
@@ -159,9 +163,24 @@ div.large-padding,.large-padding{
     padding: 2em;
 }
 
+.data-container .row .update-data-icons{
+    display: none;
+}
+
+div.container-action-buttons .containerRow{
+    gap: .5vw;
+}
+
+
+
+.data-container .row:hover .update-data-icons{
+    display: flex;
+}
+
 .data-container .row{
     border-bottom: 1px solid #7c7c7c56;
 }
+
 #search{
     outline: none;
     border: none;
@@ -180,7 +199,7 @@ div.container-trash{
     justify-content: flex-start;
 }
 
-#add-svg,.update-data-icons #trash-svg{
+#add-svg,.update-data-icons .trash-svg{
     transform: scale(60%);
     fill: #fff;
 }
@@ -232,16 +251,32 @@ div.error label.placeholder,div.error span{
     margin-left: 3.2vw;
 }
 
+.grd-1-clm{
+    grid-column: 1/2;
+}
+
+.grd-4-clm{
+    grid-column: 4/5;
+}
+
+
+.grid-4-columns{
+    gap: 2em;
+    grid-template-columns: repeat(4,1fr);
+    justify-content: center;
+    align-items: center;
+}
+
 .ContInpPlaceholder
-.left-alignment{
+.left-alignment,.left-alignment{
     text-align: left;
 }
 .ContInpPlaceholder label{
     cursor:text;
 }
 .ContInpCheckbox input{
-    width: 2em;
-    height: 2em;
+    width: 1vw;
+    height: 1vw;
 }
 .no-margin {
     margin: 0;
@@ -269,14 +304,14 @@ label.custom-label{
 .ContInpPlaceholder input:focus~.placeholder{
     display: block;
     margin-left: 4em;
-    margin-top: -1.4em;
+    margin-top: -4.4em;
 }
 #about1-svg,.save-svg{
     width: 1.1em;
     height: 1.1em;
     fill: #fff;
 }
-#edit-svg{
+.edit-svg{
     width: 1.1vw;
     height: 1.1vw;
     fill: #fff;
@@ -325,11 +360,11 @@ form.side-form {
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
-    padding: 2em;
+    padding: 1vw;
     align-items: center;
     font-size: var(--fnt-sz016);
-    gap: 3em;
-    box-shadow: 0 0 6px #777777;
+    gap: 2vw;
+    box-shadow: 3px 0 3px -2px rgba(73, 73, 73, 0.5);
     width: 100%;
     height: 100%;
     grid-column: 1/2;
@@ -346,7 +381,7 @@ div.container.short-margin-top,.short-margin-top {
 }
 
 #submitFormButton {
-    background-color: rgb(93, 93, 255);
+    background-color: var(--principal_color);
     color: #fff;
     cursor: pointer;
     font-size: var(--fnt-sz016);
@@ -400,9 +435,9 @@ div.right-alignment {
     font-size: var(--fnt-sz020);
 }
 .blue-border {
-    border: 1px solid rgb(93, 93, 255);
+    border: 1px solid var(--principal_color);
     border-radius: .3em;
-    width: 6.5em;
+    width: 7vw;
     text-align: center;
 }
 .small-height{
@@ -421,7 +456,7 @@ div.right-alignment {
     justify-content: center;
     align-items: center;
     /* background-color: rgb(93, 93, 255); */
-    background-color: rgb(93, 93, 255);
+    background-color: var(--principal_color);
     color: #fff;
     border-radius: .2em;
 }
@@ -482,7 +517,7 @@ p.no-data-paragraph {
 .flatpickr-input{
     width: 7vw;
     padding: .45vw;
-    border: 1px solid var(--main-color);
+    border: 1px solid var(--principal_color);
     border-radius: .4em;
 }
 .custom-select-wrapper{
@@ -493,4 +528,18 @@ p.no-data-paragraph {
 }
 .capitalize-text .custom-select-dropdown-content .custom-select-dropdown-option{
     text-transform: capitalize;
+}
+@media (min-width: 700px) and (max-width : 1000px){
+    .grid-4-columns{
+        grid-template-columns: repeat(2,1fr);
+    }
+    
+}
+/* mobile design don't delete me o you may experiment a 3d effect*/
+@media (max-width: 700px) and (max-height: 1000px){
+
+
+    .grid-4-columns{
+        grid-template-columns: 95%;
+    }
 }

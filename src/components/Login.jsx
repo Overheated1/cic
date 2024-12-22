@@ -58,7 +58,7 @@ export const Login = ({navigate}) => {
     async function login(e){
         e.preventDefault();
         try {
-            let response = await fetch(`${BASE_URL}${PORT}/users/ci/${userData.ci}`,);
+            let response = await fetch(`${BASE_URL}${PORT}/users/ci/${userData.ci}`);
 
             let jsonData = await response.json();
 
@@ -85,6 +85,7 @@ export const Login = ({navigate}) => {
                 document.cookie = `auth_token=${token}; max-age=3600; path=/`;
                 document.cookie = `user_name=${userData.name[0].toUpperCase() + userData.name.slice(1,userData.name.length)}; max-age=3600; path=/`;
                 document.cookie = `user_deep_level=${userData.deep_level}; max-age=3600; path=/`;
+                document.cookie = `ci=${userData.ci}; max-age=3600; path=/`;
                 navigate("/",{replace : true});
                 
                 Alert.fire({

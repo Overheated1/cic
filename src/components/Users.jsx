@@ -138,7 +138,7 @@ const Users = () => {
     return(
         <div className="users-section">
             <div className="flex-container flex-column no-margin">
-                <div className="card card-alt-wth">
+                <div className="card full-width">
                     <div className="self-align-center flex-container m01">
                         <span className="important-text">Usuarios</span>
                         |
@@ -159,7 +159,7 @@ const Users = () => {
                         </div>
                     </div>
                 </div>
-                <div className="card to-do-list-container card-alt-wth">
+                <div className="card to-do-list-container">
                     <div className="self-align-center flex-container m01 ">
                         <span className="important-text">Actividades recientes</span>
                         |

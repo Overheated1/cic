@@ -5,8 +5,8 @@ import { SuccessSvg } from "./svg_components/SuccessSvg";
 import { UserSvg } from "./svg_components/UserSvg";
 import { ApiContext } from "./ApiContext";
 import { getDataFlow, getDataFlowColorClassName, handleResponse } from "../utils/utils";
-import RingChart from "./RingChart";
-import AreaLineChart from "./AreLineChart";
+import RingChart from "./graphs/RingChart";
+import AreaLineChart from "./graphs/AreaLineChart";
 
 const AdminPanel = () => {
     const { BASE_URL,PORT } = useContext(ApiContext);
@@ -105,7 +105,7 @@ const AdminPanel = () => {
                         </div>
                     </div>
                     
-                    <div className="card card-alt">
+                    <div className="card card-alt grid-fill-2-cols">
                         <div className=" flex-container m01">
                             <span className="important-text">Usuarios</span>
                             |
@@ -127,7 +127,7 @@ const AdminPanel = () => {
                         </div>
                     </div>
                     
-                    <div className="card card-alt">
+                    <div className="card card-alt grid-fill-2-cols ">
                         <div className="self-align-center flex-container m01">
                             <span className="important-text">Consultas</span>
                             |

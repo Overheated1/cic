@@ -1,0 +1,111 @@
+.profile-settings-container{
+    display: grid;
+    grid-template-columns: 20% 80%;
+    gap: 2vw;
+    height: 100%;
+}
+
+.sidebar-logo{
+    margin-bottom: 2vw;
+    text-align: start;
+}
+
+.sidebar-item{
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 1vw;
+    padding: .7vw;
+    cursor: pointer;
+}
+
+.sidebar-item-active svg{
+    fill: var(--principal_color);
+}
+
+.sidebar-item-active{
+    background-color: rgba(95, 95, 225, 0.227);
+    border-right: 4px solid var(--principal_color);
+    color: var(--principal_color);
+}
+
+.sidebar{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 1vw 0 1vw 1vw;
+    box-shadow: 3px 0 3px -2px rgba(73, 73, 73, 0.5);
+}
+
+.exit-container:hover svg{
+    fill: var(--principal_color);
+}
+
+.exit-container:hover{
+    color: var(--principal_color);
+}
+.sidebar-content{
+    display: flex;
+    flex-direction: column;
+}
+
+.profile-card{
+    box-shadow: 0 0 3px #4d4d4d50;
+    width: 20vw;
+    border-radius: .5vw;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start;
+}
+
+.profile-card .user-svg{
+    fill: var(--principal_color);
+}
+
+.profile-card-header{
+    border-bottom: 1px solid var(--principal_color);
+    padding: .5vw 1vw;
+}
+
+.edit-container{
+    display: none;
+    background-color: rgb(95, 95, 225);
+    border-radius: .2vw;
+    cursor: pointer;
+    height: 2vw;
+
+}
+.edit-container:hover{
+    background-color: var(--principal_color);
+}
+
+.profile-card-body:hover .edit-container{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.profile-card-grid-container{
+    display: grid;
+    grid-template-columns: 25% 65% 10%;
+    width: 100%;
+    justify-content: flex-start;
+    align-items: center;
+}
+
+.profile-card-body{
+    padding: .5vw 1vw;
+}
+
+.container-svg{
+    background-color: rgba(95, 95, 225, 0.227);
+    border-radius: 50%;
+    width: 3vw;
+    height: 3vw;
+}
+
+.profile-card-body input{
+    width: 11vw;
+}

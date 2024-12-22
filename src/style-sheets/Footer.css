@@ -1,0 +1,92 @@
+#principal-footer{
+    background-color: #343434;
+    color: #fff;
+    padding: 3em;
+    display: flex;
+    flex-direction: column;
+    justify-content:flex-start;
+    gap: 3em;
+    align-items: center;
+    font-size: 16px;
+    position: relative;
+    z-index: 19;
+}
+
+.company-logo-footer{
+    width: 100%;
+}
+
+.company-logo-footer img{
+    width: 8vw;
+    height: 10vw;
+}
+div.grid-footer{
+    display: grid;
+    width: 60%;
+    align-items: flex-start;
+    gap:4em;
+    grid-template-columns: 20% 40% 20% 20%;
+}
+.footer-separator{
+    width: 80%;
+    height: .2em;
+    background-color: #9583fc;
+}
+.container-footer-title{
+    width: 100%;
+}
+.footer-title{
+    font-size: 16px;
+    padding-bottom: .2em;
+    border-bottom: 1px solid #9583fc;
+    color: #ffffff;
+}
+.footer-group .flex-container{
+    padding: .4em 0;
+    justify-content: flex-start;
+}
+.footer-group{
+    font-size: 1em;
+    width: min-content;
+    text-align: start;
+}
+div.grid-group{
+    justify-content: flex-start;
+}
+
+.custom-footer-link{
+    text-decoration: none;
+    color: #ffffff;
+}
+
+.custom-footer-link:hover,.custom-footer-link:active{
+    color: #9583fc;
+}
+
+/* tablet design don't delete me o you may experiment a 3d effect*/
+@media (min-width: 700px) and (max-width : 1000px){
+    #principal-footer{
+        font-size: 1em;
+    }
+    div.grid-footer{
+        grid-template-columns: repeat(2,1fr);
+        justify-content: center;
+    }
+    .grid-group{
+        justify-content: center;    
+    }
+}
+
+/* mobile design don't delete me o you may experiment a 3d effect*/
+@media (max-width: 700px) and (max-height: 1000px){
+    #principal-footer{
+        font-size: 1em;
+    }
+    div.grid-footer{
+        grid-template-columns: 1fr;
+        justify-content: center;
+    }
+    .grid-group{
+        justify-content: center;    
+    }
+}
