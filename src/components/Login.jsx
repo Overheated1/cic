@@ -1,15 +1,12 @@
 
-import { useContext, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import { ApiContext } from "./ApiContext.jsx";
 import  "../style-sheets/Login.css";
-import { Error } from "./Error";
-import { useDispatch,useSelector } from "react-redux";
-import { showAlert } from "../redux/actions/customAlertAction";
 import { UserSvg } from "./svg_components/UserSvg";
 import { PasswordSvg } from "./svg_components/PasswordSvg";
 import bcrypt from 'bcryptjs';
-import { Alert } from "./alert_components/Alert/Alert.js";
-import { useLocation } from "react-router-dom";
+// import { Alert }  from "./alert_components/Alert/Alert.js";
+import { fireToast } from "./alert_components/Alert/CustomAlert.jsx";
 
 // import { jwt } from 'jwt-decode';
 // import { Cookies } from 'universal-cookie';
@@ -17,16 +14,16 @@ import { useLocation } from "react-router-dom";
 export const Login = ({navigate}) => {
     const { BASE_URL,PORT } = useContext(ApiContext);
     
-    const dispatch = useDispatch();
-    const location = useLocation();
-    const from = location.state?.from?.pathname || "/Home";
+    const loginButton = useRef(null);
 
     const[userData,SetUserData] = useState({
         name:"",
         password:"",
         role:0,
-        ci:""
+        ci:"",
+        institution_id:"",
     });
+
     const [error,setError] = useState({
         errorAuth:false,
         errorServer:false
@@ -39,17 +36,18 @@ export const Login = ({navigate}) => {
     }
     const errorMsg = () => {
         if (error.errorAuth){
-            // dispatch(showAlert('Usuario o contraseña incorrectos', 3000));
-            Alert.fire({
-                "text":"Usuario o contraseña incorrectos",
-                "type":"error"
-            })
+            fireToast({ text: "Usuario o contraseña incorrectos", type: "error" });
+
+            // Alert.fire({
+            //     "text":"Usuario o contraseña incorrectos",
+            //     "type":"error"
+            // })
         }else if(error.errorServer){
-            Alert.fire({
-                "text":"Error en servidor",
-                "type":"error"
-            })
-            // dispatch(showAlert('Error en servidor', 3000));
+            fireToast({ text: "Error en servidor", type: "error" });
+            // Alert.fire({
+            //     "text":"Error en servidor",
+            //     "type":"error"
+            // })
         }
     }
 
@@ -67,9 +65,9 @@ export const Login = ({navigate}) => {
                 return;
             }
 
-            let fetchedData = jsonData.result[0];
+            let fetchedData = jsonData.result;
             let match = bcrypt.compareSync(userData.password,fetchedData['password']);
-            
+
             if(!match)
                 setError((prevData) => ({...prevData,errorAuth:true}));
             else{
@@ -78,31 +76,40 @@ export const Login = ({navigate}) => {
                 userData.role = fetchedData['role'];
                 userData.name = fetchedData['name'];
                 userData.ci = fetchedData['ci'];
-                console.log(fetchedData,fetchedData['name'])
                 userData.deep_level = fetchedData['role_deep_level'];
+                userData.institution_id = fetchedData['institution_id'];
+
                 let token = fetchedData['token'];
-                console.log(token,token.role_deep_level)
+
                 document.cookie = `auth_token=${token}; max-age=3600; path=/`;
                 document.cookie = `user_name=${userData.name[0].toUpperCase() + userData.name.slice(1,userData.name.length)}; max-age=3600; path=/`;
                 document.cookie = `user_deep_level=${userData.deep_level}; max-age=3600; path=/`;
                 document.cookie = `ci=${userData.ci}; max-age=3600; path=/`;
+                document.cookie = `institution_id=${userData.institution_id}; max-age=3600; path=/`;
                 navigate("/",{replace : true});
                 
-                Alert.fire({
-                    "text":"Todo Bien!",
-                    "type":"success"
-                })
+                // Alert.fire({
+                //     "text":"Todo Bien!",
+                //     "type":"success"
+                // })
+
+                fireToast({ text: "Todo Bien!", type: "success" });
+                
             }
 
         } catch (error) {
-            console.log(error)
+            console.error(error)
             setError((prevData) => ({...prevData,errorServer:true}));
         }
     
     }
 
+    const handleClick = (e) => {
+        if(e.key === "Enter") loginButton.current.click();
+    }
+    
     return(
-        <div className="loginPaddingDiv">
+        <div className="loginPaddingDiv" onKeyDown={ handleClick }>
             
             <div className="loginCard">
                 <div className="container-login-image">
@@ -121,7 +128,7 @@ export const Login = ({navigate}) => {
                         <label className="placeholder" htmlFor="password">Contraseña</label>
                         { <PasswordSvg/> }
                     </div>
-                    <button className="buttonLogin" type="reset" onClick={login}>Iniciar sesión</button>
+                    <button ref={loginButton} className="buttonLogin" type="reset" onClick={login}>Iniciar sesión</button>
                 </form>
             </div>
         </div>

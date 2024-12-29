@@ -9,7 +9,11 @@ export const getCookie = (name) => {
     return null;
 }
 
-
+export const getPreviousMonthDate = () => {
+    const currentDate = new Date();
+    currentDate.setMonth(currentDate.getMonth() - 1);
+    return currentDate;
+}
 
 export const getDataFlow = (number) =>{
     return parseInt(number) > 0 ? "increase" : (parseInt(number) === 0 ? "constant" : "decrease")

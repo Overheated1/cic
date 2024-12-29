@@ -51,7 +51,7 @@ export const CustomSelect = ({ customClassName,onChange,identifier,name,selected
         }
 
         //RECALCULATE THE MIN HEIGHT
-        customSelectDropdownRef.current.style.minHeight=visibleElements > 6 ? "15em" : visibleElements + "em";
+        recalculateMinHeight(customSelectDropdownRef.current,visibleElements);
 
         if(hiddenElements === options.length && noResultsRef.current)
             noResultsRef.current.style.display = "flex";
@@ -59,6 +59,7 @@ export const CustomSelect = ({ customClassName,onChange,identifier,name,selected
             noResultsRef.current.style.display = "none";    
         
     }
+
     const handleOptionClick = (e) => {
         let value = e.target.innerText;
         let optionEventCopy = e;
@@ -71,6 +72,7 @@ export const CustomSelect = ({ customClassName,onChange,identifier,name,selected
         }else{
             placeholderElement.innerText = value;
             placeholderElement.value = value;
+            optionEventCopy.target.name = name;
         }
 
         setDropdownVisible(!dropdownVisible);
@@ -81,32 +83,39 @@ export const CustomSelect = ({ customClassName,onChange,identifier,name,selected
     }
 
     const handleDropdownVisibility = () => {
-        setDropdownVisible(!dropdownVisible)
+        if(data?.length){
+            setDropdownVisible(!dropdownVisible)
         
-        let search_bar = document.getElementById(`search-bar${ID}`);
-        if(search_bar)
-            search_bar.value= "";
-
-        if(!dropdownVisible && document.querySelector(`#no-results${ID}`)) document.querySelector(`#no-results${ID}`).style.display = "none";
-        
-        let custom_select_header = customSelectMainRef.current;
-        let custom_select_dropdown = customSelectDropdownRef.current;
-        
-        if(custom_select_header && custom_select_dropdown)
-            custom_select_dropdown.style.width = (custom_select_header.getBoundingClientRect().width) + "px";
-
-        //need optimize with the scroll listener
-        if(custom_select_header.getBoundingClientRect().y < 750 && custom_select_header.getBoundingClientRect().y > 400){
-            custom_select_dropdown.style.flexDirection = "column-reverse";
-            custom_select_dropdown.style.transform = "translateY(-130%)";
-        }else{
-            custom_select_dropdown.style.flexDirection = "column";
-            custom_select_dropdown.style.transform = "translateY(0)";
+            let search_bar = document.getElementById(`search-bar${ID}`);
+            if(search_bar)
+                search_bar.value= "";
+    
+            if(!dropdownVisible && noResultsRef.current) noResultsRef.current.style.display = "none";
+            
+            let custom_select_header = customSelectMainRef.current;
+            let custom_select_dropdown = customSelectDropdownRef.current;
+            
+            if(custom_select_header && custom_select_dropdown)
+                custom_select_dropdown.style.width = (custom_select_header.getBoundingClientRect().width) + "px";
+    
+            //need optimize with the scroll listener
+            if(custom_select_header.getBoundingClientRect().y < 750 && custom_select_header.getBoundingClientRect().y > 400){
+                custom_select_dropdown.style.flexDirection = "column-reverse";
+                custom_select_dropdown.style.transform = "translateY(-115%)";
+            }else{
+                custom_select_dropdown.style.flexDirection = "column";
+                custom_select_dropdown.style.transform = "translateY(0)";
+            }
+    
+            //RECALCULATE THE MIN HEIGHT
+            recalculateMinHeight(custom_select_dropdown,data.length)
         }
-
-        //RECALCULATE THE MIN HEIGHT
-        customSelectDropdownRef.current.style.minHeight=Object.keys(data).length > 6 ? "15vw" : Object.keys(data).length + "vw";
     }
+
+    const recalculateMinHeight = (element,childrenCount) => {
+        element.style.minHeight = childrenCount > 6 ? "15vw" : ((searchable ? 3 : 0) + (childrenCount * 4) + "vw");
+    }
+
     document.addEventListener("scroll",(e) => {
 
         let custom_select_header = customSelectMainRef.current;
@@ -115,7 +124,7 @@ export const CustomSelect = ({ customClassName,onChange,identifier,name,selected
         if(custom_select_header && custom_select_dropdown){
             if(custom_select_header.getBoundingClientRect().y < 750 && custom_select_header.getBoundingClientRect().y > 400){
                 custom_select_dropdown.style.flexDirection = "column-reverse";
-                custom_select_dropdown.style.transform = "translateY(-130%)";
+                custom_select_dropdown.style.transform = "translateY(-115%)";
             }else{
                 custom_select_dropdown.style.flexDirection = "column";
                 custom_select_dropdown.style.transform = "translateY(0)";
@@ -123,17 +132,25 @@ export const CustomSelect = ({ customClassName,onChange,identifier,name,selected
         }
     })
 
+    const handleOutsideClick = (e) => {
+        if(customSelectMainRef.current){
+            if(!customSelectMainRef.current.contains(e.target) && customSelectMainRef.current != e.target) setDropdownVisible(false);
+        }
+    }
+
     useEffect(() => {
         if(selectedValueText !== "" && selectedValueText !== undefined)
             placeholderRef.current.innerText = selectedValueText;
 
-    },[selectedValueText])
+        document.addEventListener("click",handleOutsideClick);
+
+    },[selectedValueText,selectedValue])
     
     return(
         <div className={`custom-select-container ${classes}`}>
-            <div name={name} ref={ customSelectMainRef } id={`custom-select${ID}`} onClick={handleDropdownVisibility} className={`small-width custom-select ${ identifier !== undefined ? identifier : "" } ${ name !== undefined ? name : "" }`}>
+            <div name={name} ref={ customSelectMainRef } id={`custom-select${ID}`} onClick={ handleDropdownVisibility } className={`small-width custom-select ${ identifier !== undefined ? identifier : "" } ${ name !== undefined ? name : "" }`}>
                 <div className="custom-select-flex-header-content" >
-                    <span ref={ placeholderRef } className="custom-select-placeholder" id={`custom-select-placeholder${ID}`} value={placeholder}>{placeholder}</span>
+                    <span ref={ placeholderRef } className="custom-select-placeholder" id={`custom-select-placeholder${ID}`} name={ name } value={placeholder}>{data?.length ? placeholder ?? "Sin Opciones" : "Sin Opciones"}</span>
                     <CustomArrowSvgComponent needRotate={dropdownVisible}/>
                 </div>
             </div>
@@ -144,23 +161,24 @@ export const CustomSelect = ({ customClassName,onChange,identifier,name,selected
                     <input onInput={handleSearch} className="search-bar" id={`search-bar${ID}`} type="text" placeholder={placeholderSearchBar}/>
                 </li>
                 }
-                {data.length > 0 ? 
-                <div className="dropdown-content-overflow">
-                    {
-                    data.map((d) => {
-                        if(d.value === selectedValue)
-                            selectedValueText = d.text;
+                {
+                    data?.length > 0 ? 
+                        <div className="dropdown-content-overflow">
+                            {
+                            data.map((d) => {
+                                if(d.value === selectedValue)
+                                    selectedValueText = d.text;
 
-                    return (
-                        <li name={name} key={uuid()} value={d.value} className="custom-select-dropdown-option" onClick={handleOptionClick}>
-                            {d.text}
-                        </li>
-                        )
-                    })
-                    }
-                    <li id={`no-results${ID}`} ref={ noResultsRef } className="custom-select-dropdown-option no-results">{noResults}</li>
-                </div> :
-                <li className="custom-select-dropdown-option no-options">{noOPtions}</li>
+                            return (
+                                <li name={name} key={uuid()} value={d.value} className="custom-select-dropdown-option" onClick={handleOptionClick}>
+                                    {d.text}
+                                </li>
+                                )
+                            })
+                            }
+                            <li id={`no-results${ID}`} ref={ noResultsRef } className="custom-select-dropdown-option no-results">{noResults}</li>
+                        </div> :
+                        <li className="custom-select-dropdown-option no-options">{noOPtions ?? "Sin Opciones"}</li>
                 }
             </ul>
         </div>

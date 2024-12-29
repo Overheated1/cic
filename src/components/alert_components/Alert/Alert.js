@@ -1,4 +1,3 @@
-
 import { v4 as uuid } from "uuid";
 import "./resources/style-sheets/Alert.css";
 import error from "./resources/images/error.svg"

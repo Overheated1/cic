@@ -1,0 +1,129 @@
+
+.table-flex-container.action-icons-container{
+    padding-right: 2vw;
+    gap: 1.5vw;
+    justify-content: flex-end;
+}
+
+.table-flex-container.totalizer-cell{
+    height: 3.5vw;
+}
+
+.totalizer-row{
+    background-color: rgb(245, 245, 245);
+    font-weight: 600;
+}
+
+.actions-container{
+    display: grid;
+    padding: 1vw 2vw;
+    width: 100%;
+    margin: 0;
+    gap: 1vw;
+    grid-template-columns: 40% 60%;
+}
+
+.table-no-data-row{
+    display: flex;
+    gap: 1vw;
+    justify-content: center;
+    align-items: center;
+    padding: .5vw 0;
+}
+
+.container-third-btn{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 0;
+    gap: .5vw;
+}
+
+.table-flex-container {
+    padding: .5vw 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.read-only-input{
+    border: none;
+    cursor: default;
+}
+
+.th-cell{
+    font-size: var(--fnt-sz016);
+    font-weight: bold;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: .4vw;
+}
+
+.table-left-part{
+    font-size: var(--fnt-sz016);
+    min-height: 3.3vw;
+
+}
+
+
+.data-container .row .update-data-icons{
+    display: none;
+}
+
+div.container-action-buttons .containerRow{
+    gap: .5vw;
+}
+
+
+.data-container .row:hover .update-data-icons{
+    display: flex;
+}
+
+.data-container .row{
+    border-bottom: 1px solid #7c7c7c56;
+}
+
+
+.table-grid-container{
+    display: grid;
+    width: 100%;
+    grid-template-columns: 6% repeat(auto-fit, minmax(100px, 1fr));
+    gap: 10px;
+}
+
+.table-grid-container div.containerRow{
+    min-width: max-content;
+    width: max-content;
+    max-width: max-content;
+}
+
+.centered-table{
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  table-layout: fixed;
+  transform: translate(-50%, -50%);
+  border-collapse: collapse;
+  width: 100%;
+}
+
+.centered-table td {
+    border: 1px solid #4f4f4f5c;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+@media print {
+    body * {
+        visibility: hidden;
+    }
+
+    .printable-table,.printable-table * {
+        visibility: visible;
+        margin: 20px auto;
+        background-color: #f0f0f0;
+    }
+    
+}

@@ -1,9 +1,16 @@
 import Flatpickr from "react-flatpickr";
 import "flatpickr/dist/themes/light.css";
-import { useEffect, useState } from "react";
+import { useEffect, useState,useRef } from "react";
 
-export const CustomInput = ({ value,onChange,identifier,name,handleChange,readOnly }) => {
-    const [valueData,setValueData]= useState("");
+export const CustomInput = ({ value,onChange,name,handleChange,readOnly }) => {
+    let initialValue = "";
+
+    if(name === "date") initialValue = new Date()
+    else if(name === "n") initialValue = new Date().getDate();
+    else if(readOnly) initialValue = "-";
+
+    const [valueData,setValueData]= useState(initialValue);
+    const dateRef = useRef(undefined);
 
     if(onChange !== undefined)
         onChange();
@@ -20,21 +27,15 @@ export const CustomInput = ({ value,onChange,identifier,name,handleChange,readOn
     
     const handleChangeDate = (date) => {
         setValueData(date)
-        handleChange(
-            {
-                target:{
-                    classList:['small-width','blue-border','medium-height','custom-input',name,identifier],
-                    name:name,
-                    value:date[0].toISOString().split("T")[0]
-                }
-            }
+        dateRef.current.node.name = name;
+        handleChange({ target: dateRef.current.node }
         );
     }
 
     return(
         name === "date" ? 
-            <Flatpickr value={valueData} onChange={handleChangeDate} /> 
+            <Flatpickr ref={dateRef} value={valueData} onChange={handleChangeDate} /> 
             : 
-            <input  value={valueData} readOnly={readOnly} type={name === "password" ? "password" : "text"} name={name} className={`medium-width-alternative blue-border medium-height custom-input ${ name } ${ identifier }`} onChange={handleInputChange}/>
+            <input  value={valueData} readOnly={readOnly} type={name === "password" ? "password" : "text"} name={name} className={`${readOnly ? "read-only-input" : ""}  medium-width-alternative blue-border medium-height custom-input ${ name }`} onChange={handleInputChange}/>
     );
 }

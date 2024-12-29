@@ -7,6 +7,8 @@ import { ApiContext } from "./ApiContext";
 import { getDataFlow, getDataFlowColorClassName, handleResponse } from "../utils/utils";
 import RingChart from "./graphs/RingChart";
 import AreaLineChart from "./graphs/AreaLineChart";
+import { closePopup, firePopup } from "./alert_components/Alert/CustomAlert";
+import { Fallback } from "./Fallback";
 
 const AdminPanel = () => {
     const { BASE_URL,PORT } = useContext(ApiContext);
@@ -22,6 +24,10 @@ const AdminPanel = () => {
 
 
     const getCardsData = async () => {
+        let html = <img className="baby_bottle" width="150px" height="150px" src={require("../resources/test_tube.gif")} alt="Loading..." />      
+        
+        firePopup({ html : html,showConfirmButton:false,isHtmlComponent:true})
+        
         let response = await fetch(`${BASE_URL}${PORT}/query-logs`);
         let temp = await handleResponse(response);
 
@@ -46,6 +52,8 @@ const AdminPanel = () => {
         
         response = await fetch(`${BASE_URL}${PORT}/users/actual-year`);
         setUserData(await handleResponse(response));
+        
+        closePopup();
     }
     const getRingData = () => {
         let dbSize = DatabaseInfoData['dbSize'] === undefined ? 0 : DatabaseInfoData['dbSize'];

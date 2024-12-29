@@ -31,7 +31,6 @@ export const NavBar = ({navigate,data}) => {
         e.target.parentNode.classList.add("active")
 
         setTimeout(() => {
-            console.log(e.target.parentNode)
             e.target.parentNode.classList.remove("active")
         },[800])
     };
@@ -187,6 +186,7 @@ export const NavBar = ({navigate,data}) => {
                                         document.cookie = "user_name=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
                                         document.cookie = "user_deep_level=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
                                         document.cookie = "user_ci=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+                                        document.cookie = "institution_id=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
 
                                         setGreeting(prevData => ({...prevData,
                                             word:"User",

@@ -239,7 +239,7 @@ const Report = () => {
 
     return(
         <section className="TableContainer">
-            <form className="side-form">{/*institucion fecha componente patron equipo metodo concentracion patron temperatura */}
+            <form className="side-form">
                 <div className={`ContInpPlaceholder ${formDataErrors.determination_id ? 'error' : ''}`}>
                     <ComponentSvg/>
                     <div className="custom-select-wrapper">

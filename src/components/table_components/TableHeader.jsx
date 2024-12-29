@@ -9,8 +9,9 @@ import { v4 as uuid } from "uuid";
 import { useDispatch, useSelector } from "react-redux"
 import { clearSelectionAction, fullSelectionAction } from "../../redux/actions/selectedRowsNumberActions.js"
 import { exportTableToExcel } from "./tableFunctions/downloadExcel.js"
+import { printTable } from "./tableFunctions/printTable.js"
 
-export const TableHeader = ({setActualRows,table_id,dataRows,dataRowsToMap,setDataRowsToMap,columnHeaders,tableTitle,handleDelete,deleteOptionsObject}) => {
+export const TableHeader = ({setActualRows,table_id,dataRows,setDataRowsToMap,columnHeaders,tableTitle,handleDelete,deleteOptionsObject}) => {
     const [isVisibleSearching,setIsVisibleSearching] = useState(false);
     const [isMasterCheckChecked, setIsMasterCheckChecked] = useState(false);
     const dispatch = useDispatch();
@@ -34,39 +35,42 @@ export const TableHeader = ({setActualRows,table_id,dataRows,dataRowsToMap,setDa
     }
 
     const search = (e) => {
-        setActualRows();
-        let dataObjectArray = Object.keys(dataRowsToMap);
+        let dataObjectArray = Object.keys(dataRows);
 
         let filteredElements = {};
          
         for(let i = 0;i < dataObjectArray.length;i++){
             let dataRow = dataObjectArray[i];
-            let dataObject = dataRowsToMap[dataRow];
+            let dataObject = dataRows[dataRow];
 
-            if(Object.values(dataObject).includes(e.target.value)) filteredElements[dataRow] = dataObject;
+            Object.values(dataObject).forEach((data) => {
+                if(String(data).includes(e.target.value)) filteredElements[dataRow] = dataObject;
+            })
         }
 
-        setDataRowsToMap(filteredElements);
+        if(Object.keys(filteredElements).length && e.target.value.length) setDataRowsToMap(filteredElements); 
+        else setActualRows();
+        
+        
     }
 
     useEffect((e) => {
-        console.log(searchInput.current);
         if(searchInput.current)
             searchInput.current.focus();
     },[isVisibleSearching]);
 
     return (
-        <div className = "thead flex-container flex-column left-alignment full-width no-padding">
+        <div className = "thead table-flex-container">
 
-            <div className="left-alignment full-width flex-container flex-column no-padding">
-                <div className={`actions-container full-width extra-gap no-margin ${selectedRowCount > 0 ? "deleting-header" : ""}`}>
+            <div className="left-alignment full-width table-flex-container flex-column no-padding">
+                <div className={`actions-container ${selectedRowCount > 0 ? "deleting-header" : ""}`}>
                 {
                     selectedRowCount === 0 ? 
                     <>
-                        <div className="table-left-part flex-container left-alignment full-width">
+                        <div className="table-left-part">
                             { 
                                 isVisibleSearching ?
-                                    <div className="flex-container bottom-alignment no-padding search">
+                                    <div className="table-flex-container bottom-alignment no-padding search">
                                         <SearchSvg/>
                                         <input ref={searchInput} id="search" onInput={search}  placeholder="Buscar..."/>
                                         <div className="close-handler-container" onClick={(e) => {setIsVisibleSearching(false)}}>
@@ -78,22 +82,22 @@ export const TableHeader = ({setActualRows,table_id,dataRows,dataRowsToMap,setDa
                             }
                         </div>
                         
-                        <div className="flex-container right-alignment extra-gap action-icons-container">
+                        <div className="table-flex-container action-icons-container">
                             <div className="parent-svg" onClick={ () => setIsVisibleSearching(!isVisibleSearching ) }>
                                 <SearchSvg/>
                             </div>
                             <div className="parent-svg" onClick={(e) => exportTableToExcel(e,dataRows,columnHeaders,tableTitle)}>
                                 <DownloadCsvSvg/>
                             </div>
-                            <div className="parent-svg">
+                            <div className="parent-svg" onClick={(e) => printTable(e,dataRows,columnHeaders,tableTitle)}>
                                 <PrintSvg/>
                             </div>
                         </div>
                     </>   
                     :
                     <>
-                        <div className="flex-container selected-rows-text">{ selectedRowCount } fila(s) seleccionada(s)</div>
-                        <div className="flex-container container-trash">
+                        <div className="table-flex-container selected-rows-text">{ selectedRowCount } fila(s) seleccionada(s)</div>
+                        <div className="table-flex-container container-trash">
                             <div className="parent-svg" onClick={handleDelete}>
                                 {deleteOptionsObject?.svgComponent ?? <TrashSvg/>}
                             </div>
@@ -104,20 +108,20 @@ export const TableHeader = ({setActualRows,table_id,dataRows,dataRowsToMap,setDa
                 </div>
             </div>
             <div className="table-grid-container">
-                <div className="flex-container header-checkbox-container" key={uuid()}> 
+                <div className="table-flex-container header-checkbox-container" key={uuid()}> 
                     <CustomCheckbox checked={isMasterCheckChecked} handleCheckbox={handleCheckAll} isMasterCheck={true} identifier={`header-checkbox`} name={`custom-checkbox`}/>
                 </div> 
                 {
                     columnHeaders.map((columnType,index) => {
                         return (
-                            <div key={uuid()} className="flex-container th-cell full-width no-margin no-padding">
+                            <div key={uuid()} className="th-cell">
                                 {columnType['svgComponent']} {columnType['label']}
                             </div>
                         );
                     })
                 }
-                <div key={uuid()} className="flex-container th-cell full-width no-margin no-padding">
-                    Acciones
+                <div key={uuid()} className="th-cell">
+                    {/* ACCIONES */}
                 </div>
                     
             </div>

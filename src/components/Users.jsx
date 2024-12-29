@@ -9,39 +9,78 @@ import { getDataFlow, getDataFlowColorClassName, handleResponse } from "../utils
 import { ApiContext } from "./ApiContext"
 import { AboutSvg } from "./svg_components/AboutSvg"
 import bcrypt from 'bcryptjs';
+import { CustomInput } from "./custom_components/CustomInput"
+import { CancelSvg } from "./svg_components/CancelSvg"
+import { CustomSelect } from "./custom_components/custom_select_component/CustomSelect"
+import { fireToast } from "./alert_components/Alert/CustomAlert"
 
 const Users = () => {
     
     const { BASE_URL,PORT } = useContext(ApiContext);
     const[userDataStatistics,setUserDataStatistics] = useState({});
     const[userData,setUserData] = useState([]);
+    const[institutionData,setInstitutionData] = useState([]);
 
     const getUserData = async () => {
-        let response = await fetch(`${BASE_URL}${PORT}/users/actual-year`);
-        setUserDataStatistics(await handleResponse(response));
+        try {
+            let response = await fetch(`${BASE_URL}${PORT}/users/actual-year`);
+            setUserDataStatistics(await handleResponse(response));
         
-        response = await fetch(`${BASE_URL}${PORT}/users`);
-        let jsonData = await handleResponse(response);
-        
-        let temp = [...jsonData];
+            response = await fetch(`${BASE_URL}${PORT}/users`);
+            let jsonData = await handleResponse(response);
+                
+            var tempInstitutions = [];
+            //   CAN IMPROVE BY MEMOIZING THE PREVIOUS FETCHED SO IF THE ID IS THE SAME USE THE SAME FETCHED AND NOT FETCH AGAIN THE SAME
+            const promises = jsonData.map(async (data, index) => {
+                if (data['institution_id']) {
+                let responseInstitution = await fetch(`${BASE_URL}${PORT}/institutions/${data['institution_id']}`);
+                let jsonDataInstitution = await handleResponse(responseInstitution);
 
-        setUserData(temp);
-    }
+                tempInstitutions.push({
+                    value: jsonDataInstitution['institution_id'],
+                    text: jsonDataInstitution['institution_name'] + index
+                })
+                return { ...data, institution_name: jsonDataInstitution['institution_name'] }; 
+                }
+                return data; 
+            });
+        
+
+            jsonData = await Promise.all(promises);
+            
+            if(jsonData){
+                let responseInstitutions = await fetch(`${BASE_URL}${PORT}/institutions`);
+                let jsonDataInstitutions = await handleResponse(responseInstitutions)
+                setInstitutionData(jsonDataInstitutions);
+            }
+            
+            setUserData(jsonData); 
+            } catch (error) {
+                console.error("Error fetching user data:", error);
+                fireToast({text : "Error fetching user data:",type : error});
+            }
+      };
 
     const handleEdit = async (e,type) => {
+        let data = e?.detail?.data;
+
         if(type === "pre-save"){
-            let data = e?.detail?.data;
             data['role_id'] = 2;
             data['password'] = data['password'].length > 10 ? data['password'] : bcrypt.hashSync(data['password'], 10);
+        }
+
+        if(type === "post-edit"){
             if(data){
+                data['password'] = data['password'].length > 10 ? data['password'] : bcrypt.hashSync(data['password'], 10);
+
                 let response = await fetch(`${BASE_URL}${PORT}/users`,{
                     method:"POST",
                     headers:{ "Content-Type": "application/json"},
                     body:JSON.stringify(data)
                 });
-                console.log(await handleResponse(response))
+    
                 getUserData();
-            }
+            }   
         }
     }
 
@@ -102,6 +141,20 @@ const Users = () => {
         options:{
             handleChange:(e) => {
                 console.log(e.target)
+            },
+        }
+    },
+    {
+        name:'institution_name',
+        fieldValueName:'institution_id',
+        label:"Institución",
+        // svgComponent:<D1AndD2/>,
+        options:{
+            handleChange:(e) => {
+                console.log(e.target)
+            },
+            customComponent : (value, tableMeta,handleChange) => {
+                return <CustomSelect selectedValue={value} onChange={handleChange} customClassName={"table-select"} name="institution_id" placeholder={"Institución"} searchable={true} noResults={"Sin Opciones"} noOPtions={"Sin Opciones"} data={institutionData} placeholderSearchBar={"Buscar.."}/>
             }
         }
     },
@@ -121,8 +174,9 @@ const Users = () => {
         },    
         {
             name:'edit-row',
-            svgComponent:<SaveSvg/>,
-            secondSvgComponent:<EditSvg/>,
+            svgComponent:<EditSvg/>,
+            secondSvgComponent:<SaveSvg/>,
+            thirdSvgComponent:<CancelSvg/>,
             action:'edit',
             callback:(e,type) => {handleEdit(e,type)}
         },  
@@ -226,3 +280,46 @@ const Users = () => {
     )
 }
 export default Users;
+
+
+
+/*
+TO CHECK
+
+const getUserData = async () => {
+        try {
+          let response = await fetch(`${BASE_URL}${PORT}/users/actual-year`);
+          setUserDataStatistics(await handleResponse(response));
+      
+          response = await fetch(`${BASE_URL}${PORT}/users`);
+          let jsonData = await handleResponse(response);
+            
+          var tempInstitutions = [];
+          const promises = jsonData.map(async (data, index) => {
+            if (data['institution_id']) {
+              let responseInstitution = await fetch(`${BASE_URL}${PORT}/institutions/${data['institution_id']}`);
+              let jsonDataInstitution = await handleResponse(responseInstitution);
+
+              tempInstitutions.push({
+                value: jsonDataInstitution['institution_id'],
+                text: jsonDataInstitution['institution_name'] + index
+              })
+              return { ...data, institution_name: jsonDataInstitution['institution_name'] }; 
+            }
+            return data; 
+          });
+      
+
+          jsonData = await Promise.all(promises);
+          
+          if(jsonData)
+            setInstitutionData(tempInstitutions);
+          
+          setUserData(jsonData); 
+        } catch (error) {
+          console.error("Error fetching user data:", error);
+          fireToast({text : "Error fetching user data:",type : error});
+        }
+      };
+
+*/

@@ -60,13 +60,24 @@
     align-items: flex-start;
 }
 
-.profile-card .user-svg{
+.profile-card svg{
     fill: var(--principal_color);
+}
+
+.profile-card .edit-svg,.profile-card .save-svg{
+    fill: #fff;
 }
 
 .profile-card-header{
     border-bottom: 1px solid var(--principal_color);
     padding: .5vw 1vw;
+}
+
+.container-cards-profile{
+    display: grid;
+    grid-template-columns: repeat(3,max-content);
+    gap: 2vw;
+    padding: 2vw 1vw;
 }
 
 .edit-container{
@@ -89,8 +100,9 @@
 
 .profile-card-grid-container{
     display: grid;
-    grid-template-columns: 25% 65% 10%;
+    grid-template-columns: 25% 60% 10%;
     width: 100%;
+    gap: .5vw;
     justify-content: flex-start;
     align-items: center;
 }

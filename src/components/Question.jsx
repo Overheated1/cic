@@ -5,7 +5,6 @@ const Question = ({title,paragraphToShow}) => {
     const [needRotate,setNeedRotate] = useState(false);
 
     const handleHideDropdown = (e) => {
-        console.log(e.target,e.target.classList)
         if(!e.target.classList.contains("content-to-show")) setNeedRotate(!needRotate);
     }
     return(

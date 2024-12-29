@@ -1,7 +1,7 @@
-export const CustomLabel = ({ identifier,name,value }) => {
+export const CustomLabel = ({ name,value }) => {
 
     return(
-        <label  name={name} className={`full-width blue-border custom-label ${ identifier } ${ name }`}>
+        <label  name={name} className={`full-width blue-border custom-label ${ name }`}>
             {value}
         </label>
     );

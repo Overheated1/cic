@@ -22,16 +22,6 @@
     fill: rgb(255, 0, 0);
 }
 
-.flex-container.action-icons-container{
-    padding-right: 2vw;
-}
-
-.actions-container{
-    display: grid;
-    padding: 1vw 2vw;
-    grid-template-columns: 40% 60%;
-}
-
 .select-alternative .custom-select {
     border: none;
     padding: 0 .5em;
@@ -45,7 +35,15 @@
 }
 
 .table-footer{
-    padding-top: 3vw;
+    padding-top: 1vw;
+}
+
+.table-footer .table-actions-container{
+    padding-top: 1vw;
+    width: 100%;
+    gap: 1vw;
+    padding-right: 2vw;
+    justify-content: flex-end;
 }
 
 .current-date{
@@ -60,6 +58,10 @@
     gap: 3em;
     justify-content: center;
     align-items: flex-start;
+}
+.table-select .custom-select{
+    max-width: unset;
+    padding: .33vw;
 }
 input{
     padding: .7em 1.5em;
@@ -86,7 +88,7 @@ div.no-margin-top{
 .about-card1-svg,.about-card7-svg,.about-card6-svg,.about-card5-svg,.about-card4-svg,.about-card3-svg,.about-card2-svg{
     height: 2vw;
 }
-.trash-svg,.success-svg,.error-svg,.print-svg,.download-csv-svg,.password-svg,.user-svg{
+.id-card,.cancel-svg,.trash-svg,.success-svg,.error-svg,.print-svg,.download-csv-svg,.password-svg,.user-svg{
     height: 1.5vw;
 }
 .exit-arrow-svg,.concentration-serum-svg,.serum-svg,.help-svg,.n-svg,.quality-control-svg,.d1d2-svg,.d1-and-d2-svg,.date-svg,.search-svg,.component-svg,.pattern-svg,.method-svg,.institution-svg,.equipment-svg,.concentration-svg,.temperature-svg{
@@ -124,17 +126,6 @@ form.extra-gap,div.extra-gap{
     justify-content: center;
     align-items: flex-start;
 }
-/* to check */
-.table-grid-container{
-    display: grid;
-    width: 100%;
-    grid-template-columns: 6% repeat(auto-fit, minmax(100px, 1fr));
-    gap: 10px;
-}
-
-.table-grid-container div{
-    width: 10vw;
-}
 
 div.top-column-alignment{
     justify-content: flex-start;
@@ -145,10 +136,14 @@ div.top-column-alignment{
     border-collapse: collapse;
 } */
 
-.row div{
-    max-width: 12vw;
+.row div .read-only-input{
+    /* max-width: 12vw; */
+    background-color: inherit;
 }
 
+.row * {
+    font-size: var(--fnt-sz014);
+}
 .row:nth-child(even){
 
     background-color: #f0f0f090; /* Gris claro */
@@ -163,23 +158,6 @@ div.large-padding,.large-padding{
     padding: 2em;
 }
 
-.data-container .row .update-data-icons{
-    display: none;
-}
-
-div.container-action-buttons .containerRow{
-    gap: .5vw;
-}
-
-
-
-.data-container .row:hover .update-data-icons{
-    display: flex;
-}
-
-.data-container .row{
-    border-bottom: 1px solid #7c7c7c56;
-}
 
 #search{
     outline: none;
@@ -222,7 +200,9 @@ div.error label.placeholder,div.error span{
     display: flex;
     gap: 1em;
     align-items: center;
+    position: relative;
 }
+
 .grid-two-columns{
     display: grid;
     grid-template-columns: repeat(2,1fr);
@@ -281,13 +261,18 @@ div.error label.placeholder,div.error span{
 .no-margin {
     margin: 0;
 }
+
+div.visible{
+    display: block;
+}
+
 .no-padding{
     padding: 0;
 }
 label.custom-label{
     color: #000;
     overflow: hidden;
-    font-size: var(--fnt-sz016);
+    font-size: var(--fnt-sz014);
     display: inline-flex;
     justify-content: center;
     align-items: center;
@@ -306,7 +291,7 @@ label.custom-label{
     margin-left: 4em;
     margin-top: -4.4em;
 }
-#about1-svg,.save-svg{
+#about1-svg,.save-svg,.cancel-svg{
     width: 1.1em;
     height: 1.1em;
     fill: #fff;
@@ -395,18 +380,14 @@ div.container.short-margin-top,.short-margin-top {
 }
 
 
-table td input {
-    box-shadow: 0 0 3px #777777;
-}
-
-table th {
-    font-size: var(--fnt-sz016);
-    text-align: center;
-}
-
 .thead{
     border-bottom: 1px solid #7c7c7c56;
+    flex-direction: column;
+    justify-content: flex-start;
+    width: 100%;
+    padding: 0;
 }
+
 div.flex-container.header-checkbox-container,div.flex-container.custom-checkbox-container{
     width: 4vw;
 }
@@ -504,21 +485,16 @@ p.no-data-paragraph {
     font-size: var(--fnt-sz016);
 }
 
-.table-grid-container div.containerRow{
-    min-width: max-content;
-    width: max-content;
-    max-width: max-content;
-}
-
-.containerRow div{
+/* .containerRow div{
     max-width: 1.8vw;
-}
+} */
 
 .flatpickr-input{
     width: 7vw;
     padding: .45vw;
     border: 1px solid var(--principal_color);
     border-radius: .4em;
+    text-align: center;
 }
 .custom-select-wrapper{
     width: 13em;

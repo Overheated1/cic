@@ -40,57 +40,42 @@ export const RouteHandler = ({navigate}) => {
                     'tag' : 'Usuarios',
                     'to'  : '/Users',
                 },
-                // {
-                //     'tag' : 'Repetibilidad',
-                //     'to'  : '/Repetibilidad',
-                // },
-                // {
-                //     'tag' : 'Reproducibilidad',
-                //     'to'  : '/Reproducibilidad',
-                // },
-                // {
-                //     'tag' : 'Elaboración de Muestras',
-                //     'to'  : '/Elaboración-de-Muestras',
-                // }
             ],
             'svgComponent':<QualityControlSvg/>
         },
-        // {
-        //     'tag':'Estadísticas',
-        //     'to' : '/Estadísticas',
-        //     'svgComponent':<AboutCard4Svg/>
-        // },
     ]
-    let laboratory_worker_menu_data = [
-    {
-        'tag':'Control de Calidad',
-        'subMenu':[
-            {
-                'tag' : 'Repetibilidad',
-                'to'  : '/Repetibilidad',
-            },
-            {
-                'tag' : 'Reproducibilidad',
-                'to'  : '/Reproducibilidad',
-            },{
-                'tag' : 'Elaboración de Muestras',
-                'to'  : '/Elaboración-de-Muestras',
-            }
-        ],
-        'svgComponent':<QualityControlSvg/>
-    },
-    {
-        'tag':'Acerca',
-        'to' : '/Acerca',
-        'svgComponent':<AboutSvg/>
-    },
 
-    {
-        'tag':'Ayuda',
-        'to' : '/Ayuda',
-        'svgComponent':<HelpSvg/>
-    }
-]
+    let laboratory_worker_menu_data = [
+        {
+            'tag':'Control de Calidad',
+            'subMenu':[
+                {
+                    'tag' : 'Repetibilidad',
+                    'to'  : '/Repetibilidad',
+                },
+                {
+                    'tag' : 'Reproducibilidad',
+                    'to'  : '/Reproducibilidad',
+                },{
+                    'tag' : 'Elaboración de Muestras',
+                    'to'  : '/Elaboración-de-Muestras',
+                }
+            ],
+            'svgComponent':<QualityControlSvg/>
+        },
+        {
+            'tag':'Acerca',
+            'to' : '/Acerca',
+            'svgComponent':<AboutSvg/>
+        },
+
+        {
+            'tag':'Ayuda',
+            'to' : '/Ayuda',
+            'svgComponent':<HelpSvg/>
+        }
+    ]
+    
     return(
         <Suspense fallback={ <Fallback/> }>
             <Routes>

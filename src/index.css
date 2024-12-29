@@ -10,5 +10,6 @@ code {
     monospace;
 }
 html,body,.App,#root{
+  overflow-x: hidden;
   height: 100%;
 }
